@@ -1,0 +1,19 @@
+# Ignore node_modules
+node_modules/
+npm-debug.log*
+
+# Ignore build output
+dist/
+dist-ssr/
+
+# Editor / OS files
+.vscode
+.idea
+.DS_Store
+
+# ENV variables 
+# Tuyệt đối không mang lên docker image để giữ an toàn bảo mật, biến env truyền qua docker container.
+.env
+.env.*
+.env.production
+.env.development
