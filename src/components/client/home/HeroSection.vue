@@ -20,15 +20,12 @@
     <div class="hero__overlay"></div>
 
     <div class="hero__content" data-aos="fade-up" data-aos-duration="1200">
-      <h1 class="hero__title">{{ banner.title }}</h1>
+      <h1 class="hero__title" v-html="formattedTitle(banner.title)"></h1>
       <p v-if="banner.description" class="hero__desc">
         {{ banner.description }}
       </p>
       <router-link :to="banner.cta_link" class="hero__cta">
-        {{ banner.cta_text }}
-        <svg class="hero__cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        Learn more
       </router-link>
     </div>
 
@@ -52,16 +49,23 @@ const props = defineProps({
 const isVideo = computed(() => {
   return props.banner.image_url?.toLowerCase().endsWith('.mp4')
 })
+
+const formattedTitle = (title) => {
+  if (!title) return ''
+  // For matching the reference design: first line is normal, rest is bold
+  // We'll split the title safely based on what we have
+  return title.replace(/HIGH-PERFORMANCE MODULAR HOMES FOR/i, '<span class="hero__title-light">HIGH-PERFORMANCE MODULAR HOMES FOR</span><br>')
+}
 </script>
 
 <style scoped>
 .hero {
   position: relative;
-  height: 100vh;
+  height: calc(100vh - 84px); /* Trừ đi height của header */
   width: 100%;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-end; /* Đẩy nội dung xuống đáy */
   background: #000;
 }
 
@@ -71,7 +75,7 @@ const isVideo = computed(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .hero__overlay {
@@ -79,9 +83,9 @@ const isVideo = computed(() => {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.2) 40%,
-    rgba(0, 0, 0, 0.6) 100%
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.2) 60%,
+    rgba(0, 0, 0, 0.7) 100%
   );
   z-index: 1;
 }
@@ -92,32 +96,37 @@ const isVideo = computed(() => {
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 1.25rem;
-  margin-top: 60px;
+  padding: 0 1.25rem 4rem 1.25rem; /* Padding bottom lớn */
 }
 
 @media (min-width: 768px) {
-  .hero__content { padding: 0 2rem; }
+  .hero__content { padding: 0 2rem 5rem 2rem; }
 }
 
 .hero__title {
   max-width: 900px;
-  font-size: 2.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.3;
   color: #fff;
   white-space: pre-line;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.03em;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
 }
 
+::v-deep(.hero__title-light) {
+  font-weight: 300;
+  font-size: 0.9em;
+  letter-spacing: 0em;
+}
+
 @media (min-width: 768px) {
-  .hero__title { font-size: 4rem; }
+  .hero__title { font-size: 2.25rem; }
 }
 
 @media (min-width: 1024px) {
-  .hero__title { font-size: 5.5rem; }
+  .hero__title { font-size: 2.5rem; max-width: 800px; }
 }
 
 .hero__desc {
@@ -125,43 +134,27 @@ const isVideo = computed(() => {
   font-size: 1rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   font-weight: 400;
-}
-
-@media (min-width: 768px) {
-  .hero__desc { font-size: 1.125rem; }
+  display: none; /* Ẩn đi để giống mẫu nhất */
 }
 
 .hero__cta {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 1.125rem 2.5rem;
+  justify-content: center;
+  padding: 10px 24px;
   font-size: 0.938rem;
-  font-weight: 700;
-  color: #fff;
-  background: #0a4834;
+  font-weight: 500;
+  color: #111111;
+  background: #ffffff;
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
 }
 
 .hero__cta:hover {
-  background: #fff;
-  color: #0a4834;
-  transform: translateX(5px);
-}
-
-.hero__cta-icon {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.3s ease;
-}
-
-.hero__cta:hover .hero__cta-icon {
-  transform: translateX(3px);
+  background: #f0f0f0;
+  color: #000;
 }
 
 /* Scroll Indicator */

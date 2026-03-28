@@ -1,59 +1,56 @@
 <template>
   <div v-if="project" class="bg-white min-h-screen text-dark">
     <!-- ════════════════════════════════════════════
-         HERO SECTION — Dark Teal with Stats
+         HERO SECTION — using nen.avif
     ═════════════════════════════════════════════ -->
-    <section class="relative min-h-[70vh] md:min-h-[80vh] flex items-center bg-[#0a3322] overflow-hidden">
-      <!-- Background Image -->
-      <div class="absolute inset-0">
-        <img :src="project.heroImage" :alt="project.title" class="h-full w-full object-cover opacity-80" />
-        <div class="absolute inset-0 bg-gradient-to-b from-[#0a3322]/90 via-[#0a3322]/40 to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-white to-transparent"></div>
-      </div>
+    <section class="relative pt-32 pb-56 bg-cover bg-center overflow-hidden" style="background-image: url('/images/home/nen.avif')">
+      <!-- Dark overlay to ensure text readability if needed -->
+      <!-- <div class="absolute inset-0 bg-black/20"></div> -->
 
-      <div class="container-custom relative z-10 py-24 mt-20 pointer-events-none">
-        <div class="grid lg:grid-cols-[1fr_1.1fr] gap-12 items-start">
+      <div class="container-custom relative z-10 text-white">
+        <div class="grid lg:grid-cols-[1fr_1.2fr] gap-12 items-start">
           <!-- Left: Title & Quick Nav -->
-          <div class="text-white pointer-events-auto" data-aos="fade-right">
-            <h1 class="text-4xl md:text-6xl font-display font-semibold leading-[1.1] mb-6 tracking-tight">{{ project.title }}</h1>
-            <p class="text-[13px] md:text-sm text-white/70 mb-10 flex items-center gap-2 font-medium tracking-wide">
-              <svg class="w-4 h-4 text-white/50" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
-              Canada
+          <div data-aos="fade-right">
+            <!-- Logo area if needed, but header handles logo. Just title. -->
+            <h1 class="text-[32px] md:text-[44px] font-display font-semibold leading-[1.2] mb-4 tracking-tight">{{ project.title }}</h1>
+            <p class="text-[13px] md:text-sm text-white/90 mb-8 flex items-center gap-2 font-medium tracking-wide">
+              <svg class="w-4 h-4 text-white/70" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+              {{ project.location || 'Canada' }}
             </p>
             
-            <div class="flex flex-wrap gap-3 mt-12">
-              <a v-if="project.floorPlanImage" href="#floorplan" class="hero-btn">Floor plan</a>
-              <a v-if="project.gallery.length" href="#gallery" class="hero-btn">Image gallery</a>
-              <a v-if="project.videoUrl" href="#video" class="hero-btn">Video</a>
+            <div class="flex flex-wrap gap-3 mt-8">
+              <a v-if="project.floorPlanImage" href="#floorplan" class="bg-white text-black px-6 py-2.5 text-[13px] font-bold hover:bg-gray-100 transition-colors">Floor plan</a>
+              <button v-if="project.gallery.length" @click="openGalleryAt(0)" class="bg-white text-black px-6 py-2.5 text-[13px] font-bold hover:bg-gray-100 transition-colors">Image gallery</button>
+              <a v-if="project.videoUrl" href="#video" class="bg-white text-black px-6 py-2.5 text-[13px] font-bold hover:bg-gray-100 transition-colors">Video</a>
             </div>
           </div>
 
           <!-- Right: Summary Specs -->
-          <div class="text-white pointer-events-auto pt-4 md:pt-12" data-aos="fade-left">
-            <div class="grid grid-cols-3 gap-6 mb-10">
+          <div data-aos="fade-left" class="pt-2">
+            <div class="flex flex-wrap md:flex-nowrap gap-8 md:gap-16 mb-8">
               <div class="flex flex-col gap-2">
-                <span class="text-[10px] uppercase text-white/60 font-bold tracking-[0.1em]">Bedroom</span>
-                <div class="flex items-center gap-3">
-                   <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                   <span class="text-md md:text-lg font-medium">{{ project.bedrooms }} Rooms</span>
+                <span class="text-[14px] font-bold text-white">Bedroom</span>
+                <div class="flex items-center gap-2">
+                   <svg class="w-5 h-5 opacity-90" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                   <span class="text-[13px] font-medium">{{ project.bedrooms }} Rooms</span>
                 </div>
               </div>
               <div class="flex flex-col gap-2">
-                <span class="text-[10px] uppercase text-white/60 font-bold tracking-[0.1em]">Bathroom</span>
-                <div class="flex items-center gap-3">
-                   <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                   <span class="text-md md:text-lg font-medium">{{ project.bathrooms }} Rooms</span>
+                <span class="text-[14px] font-bold text-white">Bathroom</span>
+                <div class="flex items-center gap-2">
+                   <svg class="w-5 h-5 opacity-90" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                   <span class="text-[13px] font-medium">{{ project.bathrooms }} Rooms</span>
                 </div>
               </div>
               <div class="flex flex-col gap-2">
-                <span class="text-[10px] uppercase text-white/60 font-bold tracking-[0.1em]">Area</span>
-                <div class="flex items-center gap-3">
-                   <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
-                   <span class="text-md md:text-lg font-medium">{{ project.areaSqft }} Sqft</span>
+                <span class="text-[14px] font-bold text-white">Area</span>
+                <div class="flex items-center gap-2">
+                   <svg class="w-5 h-5 opacity-90" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                   <span class="text-[13px] font-medium">{{ project.areaSqft }} Sqft</span>
                 </div>
               </div>
             </div>
-            <p class="text-[14px] leading-relaxed text-white/80 font-normal max-w-lg mt-8">
+            <p class="text-[13px] md:text-[14px] leading-[1.8] text-white/90 font-medium max-w-xl">
                {{ project.summary }}
             </p>
           </div>
@@ -62,92 +59,112 @@
     </section>
 
     <!-- ════════════════════════════════════════════
+         OVERLAPPING HERO IMAGE
+    ═════════════════════════════════════════════ -->
+    <section class="relative z-20 -mt-32 pb-16 bg-white" data-aos="fade-up">
+       <div class="container-custom">
+          <div class="w-full h-[50vh] md:h-[75vh] overflow-hidden cursor-zoom-in shadow-xl bg-gray-100" @click="openGalleryAt(0)">
+             <img :src="project.heroImage" class="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" />
+          </div>
+       </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
          FLOOR PLAN
     ═════════════════════════════════════════════ -->
-    <section v-if="project.floorPlanImage" id="floorplan" class="py-16 md:py-24 bg-white" data-aos="fade-up">
+    <section v-if="project.floorPlanImage" id="floorplan" class="py-12 bg-white" data-aos="fade-up">
        <div class="container-custom">
-          <div class="max-w-4xl mx-auto border border-gray-100 p-6 md:p-12 bg-white shadow-sm cursor-zoom-in" @click="openGalleryAt(allImages.indexOf(project.floorPlanImage))">
+          <div class="max-w-5xl mx-auto cursor-zoom-in" @click="openGalleryAt(allImages.indexOf(project.floorPlanImage))">
             <img :src="project.floorPlanImage" class="w-full h-auto" />
           </div>
        </div>
     </section>
 
     <!-- ════════════════════════════════════════════
-         SPECIFICATIONS GRID (Alternating)
+         SPECIFICATIONS GRID (Custom Alternating Layout)
     ═════════════════════════════════════════════ -->
-    <section class="bg-[#f1f1f1]">
-      <!-- Block 1: Technical specs -->
-      <div id="overview" class="grid lg:grid-cols-[1fr_1.6fr] gap-0">
-         <div class="p-10 lg:p-20 flex flex-col justify-center">
-            <h2 class="text-3xl lg:text-5xl font-display font-semibold mb-12 text-dark leading-[1.1] tracking-tight">Project<br/>Specifications</h2>
-            <div class="space-y-10">
-                <div>
-                  <p class="text-[11px] font-bold uppercase tracking-[0.1em] text-dark mb-4">General Information</p>
-                  <ul class="text-[14px] text-gray-600 space-y-1 font-medium">
-                    <li>425 sq ft</li>
-                    <li>1 bedrooms ( Studio )</li>
-                    <li>1 bathrooms</li>
-                  </ul>
-                </div>
-                <div>
-                  <ul class="text-[14px] text-gray-600 space-y-1 font-medium">
-                    <li>Modular Installation</li>
-                    <li>1 story</li>
-                    <li>1 kitchen</li>
-                  </ul>
-                </div>
-            </div>
-         </div>
-         <div class="min-h-[400px] lg:min-h-[600px] overflow-hidden cursor-pointer" @click="openGalleryAt(0)">
-            <img :src="project.gallery[0] || project.heroImage" class="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" />
-         </div>
-      </div>
+    <section class="py-16 md:py-24 bg-[#f4f4f4]">
+      <div class="container-custom flex flex-col gap-12 lg:gap-24">
+        
+        <!-- Row 1: Specs -->
+        <div class="grid lg:grid-cols-12 gap-12 items-start">
+           <div class="lg:col-span-4 lg:pr-10">
+              <h2 class="text-3xl font-display font-bold mb-8 text-black leading-tight tracking-tight">Project<br/>Specifications</h2>
+              <div>
+                <p class="text-[13px] font-bold text-black mb-4">General Information</p>
+                <ul class="text-[14px] text-gray-500 space-y-1 font-medium">
+                  <li>{{ project.areaSqft }} sq ft</li>
+                  <li>{{ project.bedrooms }} bedrooms ( Studio )</li>
+                  <li>{{ project.bathrooms }} bathrooms</li>
+                  <li class="pt-4">{{ project.installTime }}</li>
+                  <li>{{ project.stories }} story</li>
+                  <li>{{ project.kitchens }} kitchen</li>
+                </ul>
+              </div>
+           </div>
+           <div class="lg:col-span-8">
+              <div v-if="project.videoUrl" id="video" class="w-full aspect-video overflow-hidden bg-black shadow-lg">
+                 <iframe :src="project.videoUrl" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+              <div v-else class="w-full h-auto overflow-hidden bg-gray-100 cursor-zoom-in group" @click="openGalleryAt(0)">
+                 <img :src="project.gallery[0] || project.heroImage" class="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-105" />
+              </div>
+           </div>
+        </div>
 
-      <!-- Block 2: Features -->
-      <div class="grid lg:grid-cols-[1.6fr_1fr] gap-0">
-         <div class="min-h-[400px] lg:min-h-[600px] overflow-hidden order-2 lg:order-1 cursor-pointer" @click="openGalleryAt(1)">
-            <img :src="project.gallery[1] || project.heroImage" class="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" />
-         </div>
-         <div class="p-10 lg:p-20 flex flex-col justify-center order-1 lg:order-2">
-            <h3 class="text-3xl lg:text-4xl font-display font-semibold mb-10 text-dark tracking-tight">Features</h3>
-            <ul class="space-y-4 text-[14px] font-medium text-gray-600">
-              <li>Steel framework</li>
-              <li>Solar + Battery Powered</li>
-              <li>Smart home system</li>
-              <br/>
-              <li>Front Porch</li>
-              <li>Insulated Walls</li>
-              <li>1 entrance</li>
-            </ul>
-         </div>
-      </div>
+        <!-- Row 2: Features -->
+        <div v-if="project.features && project.features.length" class="grid lg:grid-cols-12 gap-12 items-start">
+           <div class="lg:col-span-4 lg:pr-10">
+              <h3 class="text-[15px] font-bold mb-6 text-black tracking-tight">Features</h3>
+              <ul class="space-y-1 text-[14px] font-medium text-gray-500">
+                <li v-for="(feat, i) in project.features" :key="i">{{ feat }}</li>
+              </ul>
+           </div>
+           <div class="lg:col-span-8">
+              <div v-if="project.gallery[1]" class="w-full h-auto overflow-hidden bg-gray-100 cursor-zoom-in group" @click="openGalleryAt(1)">
+                 <img :src="project.gallery[1]" class="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-105" />
+              </div>
+           </div>
+        </div>
 
-      <!-- Block 3: Finishing -->
-      <div class="grid lg:grid-cols-[1fr_1.6fr] gap-0">
-         <div class="p-10 lg:p-20 flex flex-col justify-center">
-            <h3 class="text-2xl lg:text-3xl font-display font-semibold mb-10 text-dark tracking-tight">Finishing Options</h3>
-            <div class="grid grid-cols-2 gap-8 text-[14px] font-medium text-gray-600">
-              <ul class="space-y-1">
-                <li>Roofs</li>
-                <li>Doors</li>
-                <li>Cladding</li>
-                <li>Lighting</li>
-              </ul>
-              <ul class="space-y-1">
-                <li>Ceiling</li>
-                <li>Flooring/Decking</li>
-                <li>Appliances</li>
-                <li>Furnishings</li>
-              </ul>
-            </div>
-            <div class="mt-12 flex flex-wrap gap-4">
-              <router-link to="/contact" class="bg-black text-white px-8 py-3.5 text-[11px] font-bold uppercase tracking-widest hover:bg-brand transition-all">Request a Quote</router-link>
-              <button @click="openGalleryAt(2)" class="border-2 border-black px-8 py-3.5 text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all">Open Gallery</button>
-            </div>
-         </div>
-         <div class="min-h-[400px] lg:min-h-[600px] overflow-hidden cursor-pointer" @click="openGalleryAt(2)">
-            <img :src="project.gallery[2] || project.heroImage" class="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" />
-         </div>
+        <!-- Row 3: Double Images -->
+        <div v-if="project.gallery[2]" class="grid lg:grid-cols-12 gap-12 items-start">
+           <div class="lg:col-span-7">
+              <div class="w-full h-auto overflow-hidden bg-gray-100 cursor-zoom-in group" @click="openGalleryAt(2)">
+                 <img :src="project.gallery[2]" class="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-105" />
+              </div>
+           </div>
+           <div class="lg:col-span-5 lg:pl-10 lg:pt-20">
+              <div v-if="project.gallery[3]" class="w-full h-auto overflow-hidden bg-gray-100 cursor-zoom-in group" @click="openGalleryAt(3)">
+                 <img :src="project.gallery[3]" class="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-105" />
+              </div>
+           </div>
+        </div>
+
+        <!-- Row 4: Finishing Options -->
+        <div v-if="project.finishing_options && project.finishing_options.length" class="grid lg:grid-cols-12 gap-12 items-end">
+           <div class="lg:col-span-4 lg:pr-10 pb-4">
+              <h3 class="text-[15px] font-bold mb-6 text-black tracking-tight">Finishing Options</h3>
+              <div class="grid grid-cols-2 gap-4 text-[14px] font-medium text-gray-500 mb-10">
+                <ul class="space-y-1">
+                  <li v-for="(opt, i) in project.finishing_options.slice(0, Math.ceil(project.finishing_options.length / 2))" :key="'f1-'+i">{{ opt }}</li>
+                </ul>
+                <ul class="space-y-1">
+                  <li v-for="(opt, i) in project.finishing_options.slice(Math.ceil(project.finishing_options.length / 2))" :key="'f2-'+i">{{ opt }}</li>
+                </ul>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <router-link to="/contact" class="bg-black text-white px-6 py-3 text-[12px] font-bold hover:bg-gray-800 transition-all">Request a Quote</router-link>
+                <button @click="openGalleryAt(0)" class="bg-black text-white px-6 py-3 text-[12px] font-bold hover:bg-gray-800 transition-all">Open Gallery</button>
+              </div>
+           </div>
+           <div class="lg:col-span-8">
+              <div v-if="project.gallery[4]" class="w-full h-auto overflow-hidden bg-gray-100 cursor-zoom-in group" @click="openGalleryAt(4)">
+                 <img :src="project.gallery[4]" class="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-105" />
+              </div>
+           </div>
+        </div>
+
       </div>
     </section>
 
@@ -157,12 +174,12 @@
     <section class="py-24 bg-white" data-aos="fade-up">
        <div class="container-custom">
           <!-- CTA Row -->
-          <div class="flex flex-col md:flex-row items-center justify-between gap-12 pb-24 border-b border-gray-100">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 pb-20 border-b border-gray-200">
             <div>
-              <h2 class="text-4xl lg:text-6xl font-display font-semibold tracking-tight text-dark mb-4">Ready to talk about your own project?</h2>
-              <p class="text-gray-400 font-medium text-sm">Get expert advice from one of our consultants to help you find your ideal home</p>
+              <h2 class="text-3xl md:text-5xl font-display font-bold tracking-tight text-black mb-3">Ready to talk about your own project?</h2>
+              <p class="text-gray-500 font-medium text-[13px] md:text-sm">Get expert advice from one of our consultants to help you find your ideal home</p>
             </div>
-            <router-link to="/contact" class="bg-black text-white px-10 py-5 text-[12px] font-bold uppercase tracking-widest hover:bg-brand transition-all whitespace-nowrap">
+            <router-link to="/contact" class="bg-black text-white px-8 py-4 text-[12px] font-bold hover:bg-gray-800 transition-all whitespace-nowrap">
                 CONTACT OUR TEAM
             </router-link>
           </div>
@@ -209,13 +226,7 @@
          GALLERY / VIDEO SECTION ANCHORS
     ═════════════════════════════════════════════ -->
     <div id="gallery" class="scroll-mt-32"></div>
-    <section v-if="project.videoUrl" id="video" class="py-24 bg-white scroll-mt-32" data-aos="fade-up">
-       <div class="container-custom">
-          <div class="max-w-5xl mx-auto aspect-video rounded-sm overflow-hidden bg-black shadow-2xl">
-              <iframe :src="project.videoUrl" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-       </div>
-    </section>
+
 
     <!-- ════════════════════════════════════════════
          ADVANCED LIGHTBOX

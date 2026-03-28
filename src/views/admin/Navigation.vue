@@ -164,7 +164,7 @@
               </label>
               <label class="space-y-2">
                 <span class="text-sm font-medium text-slate-700">CTA path</span>
-                <input v-model="menuConfig.cta_path" type="text" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100" placeholder="/contact?type=project" />
+                <input v-model="menuConfig.cta_path" type="text" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100" placeholder="/enquire-now" />
               </label>
               <label class="space-y-2">
                 <span class="text-sm font-medium text-slate-700">Search path</span>
@@ -216,7 +216,7 @@ function createEmptyConfig() {
     location: 'header',
     locale: 'en-US',
     cta_label: 'Enquire Now',
-    cta_path: '/contact?type=project',
+    cta_path: '/enquire-now',
     search_path: '/blogs',
     items: [],
   }
@@ -247,7 +247,7 @@ function normalizeConfig(config) {
     location: config?.location ?? 'header',
     locale: config?.locale ?? 'en-US',
     cta_label: config?.cta_label ?? 'Enquire Now',
-    cta_path: config?.cta_path ?? '/contact?type=project',
+    cta_path: config?.cta_path ?? '/enquire-now',
     search_path: config?.search_path ?? '/blogs',
     items: (config?.items ?? []).map(normalizeItem),
   }
@@ -300,7 +300,7 @@ async function saveMenu() {
       location: menuConfig.location,
       locale: menuConfig.locale,
       cta_label: menuConfig.cta_label?.trim() || 'Enquire Now',
-      cta_path: menuConfig.cta_path?.trim() || '/contact?type=project',
+      cta_path: menuConfig.cta_path?.trim() || '/enquire-now',
       search_path: menuConfig.search_path?.trim() || '/blogs',
       items: menuConfig.items.map((item, index) => buildItemPayload(item, index)),
     }

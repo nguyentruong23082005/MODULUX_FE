@@ -128,11 +128,11 @@ const fallbackItems = [
     ],
   },
   { key: 'blog', label: 'Blog', path: '/blogs' },
-  { key: 'contact', label: 'Contact', path: '/contact?type=project' },
+  { key: 'contact', label: 'Contact', path: '/contact?type=general' },
 ]
 
 const menuItems = ref(fallbackItems)
-const cta = ref({ label: 'Enquire Now', path: '/contact?type=project' })
+const cta = ref({ label: 'Enquire Now', path: '/contact?type=general' })
 const searchPath = ref('/blogs')
 
 const mainItems = computed(() => menuItems.value)
@@ -146,6 +146,18 @@ function handleScroll() {
   isScrolled.value = window.scrollY > 20
 }
 
+function normalizeCtaPath(path, label) {
+  if (!path) {
+    return '/contact?type=general'
+  }
+
+  if (label?.toLowerCase().includes('enquire') || path.includes('/enquire-now')) {
+    return '/contact?type=general'
+  }
+
+  return path
+}
+
 async function fetchMenu() {
   try {
     const { data } = await publicApi.get('/api/v1/site/menu', {
@@ -156,7 +168,10 @@ async function fetchMenu() {
       menuItems.value = data.items
     }
     if (data?.cta?.label && data?.cta?.path) {
-      cta.value = data.cta
+      cta.value = {
+        ...data.cta,
+        path: normalizeCtaPath(data.cta.path, data.cta.label),
+      }
     }
     if (data?.search?.path) {
       searchPath.value = data.search.path
@@ -180,21 +195,19 @@ onUnmounted(() => {
 
 <style scoped>
 /* ========================================
-   HEADER — nền trắng, fixed top
+   HEADER — nền trắng, sticky top
    ======================================== */
 .header {
-  position: fixed;
-  inset-inline: 0;
+  position: sticky;
   top: 0;
   z-index: 50;
-  background: transparent;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
   transition: all 0.3s ease;
 }
 
 .header--scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .header__inner {
@@ -209,7 +222,7 @@ onUnmounted(() => {
 }
 
 .header--scrolled .header__inner {
-  height: 72px;
+  height: 84px; /* Giữ nguyên chiều cao giống mẫu */
 }
 
 @media (min-width: 768px) {
@@ -228,12 +241,11 @@ onUnmounted(() => {
 }
 
 .header--scrolled .header__logo img {
-  height: 42px;
+  height: 48px;
 }
 
 @media (min-width: 768px) {
   .header__logo img { height: 54px; }
-  .header--scrolled .header__logo img { height: 48px; }
 }
 
 /* ---- Right group: Nav + Actions gom phải ---- */
@@ -256,27 +268,35 @@ onUnmounted(() => {
 /* ---- Nav link ---- */
 .nav-link {
   position: relative;
+  display: inline-flex;
+  align-items: center;
   font-size: 0.938rem;
   font-weight: 500;
-  color: #fff;
+  color: #111111;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.3s ease;
+  transition:
+    color 0.3s ease,
+    font-weight 0.3s ease;
   cursor: pointer;
   background: none;
   border: none;
   padding: 0;
   font-family: inherit;
-  letter-spacing: 0.02em;
 }
 
 .header--scrolled .nav-link {
-  color: #222;
+  color: #111111;
 }
 
 .nav-link:hover,
-.router-link-active.nav-link {
-  color: #0a4834 !important;
+.nav-link:focus-visible,
+.router-link-active.nav-link,
+.nav-dropdown:hover > .nav-link,
+.nav-dropdown:focus-within > .nav-link {
+  color: #355845 !important;
+  font-weight: 700;
+  outline: none;
 }
 
 .nav-link__icon {
@@ -291,35 +311,46 @@ onUnmounted(() => {
   transform: rotate(180deg);
 }
 
-/* ---- Dropdown ---- */
 .nav-dropdown {
   position: relative;
+}
+
+.nav-dropdown::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 22px;
 }
 
 .nav-dropdown__panel {
   position: absolute;
   left: 50%;
-  top: 100%;
+  top: calc(100% + 18px);
   transform: translateX(-50%);
-  margin-top: 20px;
   min-width: 250px;
   padding: 10px 6px;
   background: #fff;
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.10),
-    0 2px 8px rgba(0, 0, 0, 0.04);
+    0 10px 40px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.03);
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition:
+    opacity 0.24s ease,
+    transform 0.24s ease,
+    visibility 0.24s ease;
   pointer-events: none;
 }
 
-.nav-dropdown:hover .nav-dropdown__panel {
+.nav-dropdown:hover .nav-dropdown__panel,
+.nav-dropdown:focus-within .nav-dropdown__panel {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  margin-top: 16px;
+  transform: translateX(-50%) translateY(0);
 }
 
 .nav-dropdown__item {
@@ -327,15 +358,22 @@ onUnmounted(() => {
   padding: 10px 18px;
   font-size: 0.95rem;
   font-weight: 500;
-  color: #222;
+  color: #333;
   text-decoration: none;
-  border-radius: 10px;
-  transition: all 0.2s;
+  border-radius: 8px;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    font-weight 0.2s ease;
 }
 
-.nav-dropdown__item:hover {
-  background: #f5f5f5;
-  color: #0a4834;
+.nav-dropdown__item:hover,
+.nav-dropdown__item:focus-visible,
+.nav-dropdown__item.router-link-active {
+  background: #f2f6f3;
+  color: #355845;
+  font-weight: 700;
+  outline: none;
 }
 
 /* ---- Actions (divider | search | CTA) ---- */
@@ -349,12 +387,12 @@ onUnmounted(() => {
 .header__divider {
   font-size: 1.2rem;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.3);
+  color: #e0e0e0;
   user-select: none;
 }
 
 .header--scrolled .header__divider {
-  color: #eee;
+  color: #e0e0e0;
 }
 
 .header__search {
@@ -364,17 +402,17 @@ onUnmounted(() => {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  color: #fff;
+  color: #111111;
   transition: all 0.2s;
 }
 
 .header--scrolled .header__search {
-  color: #333;
+  color: #111111;
 }
 
 .header__search:hover {
-  background: rgba(10, 72, 52, 0.1);
-  color: #0a4834;
+  background: rgba(0, 0, 0, 0.05);
+  color: #5E6F63;
 }
 
 .header__search-icon {
@@ -389,24 +427,23 @@ onUnmounted(() => {
   padding: 12px 28px;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #fff;
-  background: #0a4834;
+  color: #ffffff;
+  background: #111111;
   text-decoration: none;
   transition: all 0.3s ease;
-  letter-spacing: 0.01em;
+  border-radius: 2px;
 }
 
 .header--scrolled .header__cta {
-  background: #222;
+  background: #111111;
 }
 
 .header__cta:hover {
-  background: #0d5d43;
-  transform: translateY(-1px);
+  background: #333333;
 }
 
 .header--scrolled .header__cta:hover {
-  background: #0a4834;
+  background: #333333;
 }
 
 /* ---- Hamburger (mobile) ---- */
@@ -418,12 +455,12 @@ onUnmounted(() => {
   height: 40px;
   border: none;
   background: none;
-  color: #fff;
+  color: #111111;
   cursor: pointer;
 }
 
 .header--scrolled .header__hamburger {
-  color: #222;
+  color: #111111;
 }
 
 .header__hamburger svg {

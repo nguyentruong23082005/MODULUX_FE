@@ -21,7 +21,8 @@
           :data-aos-delay="idx * 50"
         >
           <img
-            :src="partner.logo"
+            v-if="partner.logo_url"
+            :src="partner.logo_url"
             :alt="partner.name"
             class="h-10 w-auto object-contain sm:h-12 md:h-14 lg:h-16"
           />
@@ -33,31 +34,21 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, onMounted } from 'vue'
+import publicApi from '@/services/publicApi'
 
-const props = defineProps({
-  partners: {
-    type: Array,
-    required: false,
-    default: () => []
-  },
+const displayPartners = ref([])
+
+const fetchPartners = async () => {
+  try {
+    const res = await publicApi.get('/api/v1/partners/')
+    displayPartners.value = res.data.sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+  } catch (error) {
+    console.error('Failed to load partners', error)
+  }
+}
+
+onMounted(() => {
+  fetchPartners()
 })
-
-// Chép tay cứng danh sách đúng 10 ảnh giống file hệ thống User yêu cầu (Partners1 đến Partners10).
-// Việc này đảm bảo tỷ lệ grid 5x2 (10 logo) chính xác 100% với giao diện gốc
-// mà không phụ thuộc vào mock data thiếu đường dẫn ảnh ở ngoài.
-const hardcodedPartners = [
-  { id: 1, logo: '/images/home/Partners1.webp', name: 'rothoblaas' },
-  { id: 2, logo: '/images/home/Partners2.webp', name: 'INNOVA HOMES' },
-  { id: 3, logo: '/images/home/Partners3.webp', name: 'Life Design KABAYA' },
-  { id: 4, logo: '/images/home/Partners4.webp', name: 'FPT' },
-  { id: 5, logo: '/images/home/Partners5.webp', name: 'TranDuc' },
-  { id: 6, logo: '/images/home/Partners6.webp', name: 'NOVALAND' },
-  { id: 7, logo: '/images/home/Partners7.webp', name: 'ecopark' },
-  { id: 8, logo: '/images/home/Partners8.webp', name: 'AN LAM' },
-  { id: 9, logo: '/images/home/Partners9.webp', name: 'NovaWORLD' },
-  { id: 10, logo: '/images/home/Partners10.webp', name: 'K-Town' }
-]
-
-const displayPartners = computed(() => hardcodedPartners)
 </script>

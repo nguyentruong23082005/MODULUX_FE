@@ -29,6 +29,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import publicApi from '@/services/publicApi'
+import { getBlogs } from '@/services/blogApi'
 
 import HeroSection from '@/components/client/home/HeroSection.vue'
 import AboutSection from '@/components/client/home/AboutSection.vue'
@@ -156,14 +157,15 @@ const blogPosts = ref([])
 
 const fetchBlogPosts = async () => {
   try {
-    const res = await publicApi.get('/api/v1/posts/', { params: { limit: 3 } })
-    if (res.data && res.data.length > 0) {
-      blogPosts.value = res.data.map(post => ({
+    const data = await getBlogs({ page: 1, page_size: 6 })
+    if (data.items && data.items.length > 0) {
+      blogPosts.value = data.items.map(post => ({
         slug: post.slug,
         title: post.title,
-        summary: post.summary,
-        thumbnail: post.thumbnail_url || '/images/blog-placeholder.jpg',
-        date: post.published_at || post.created_at
+        excerpt: post.excerpt,
+        image: post.image_url || '/images/blog-placeholder.jpg',
+        category: post.type || 'PROJECTS',
+        date: post.updated_at || post.created_at,
       }))
     } else {
       blogPosts.value = []

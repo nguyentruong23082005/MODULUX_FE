@@ -8,6 +8,7 @@ const routes = [
       { path: '', name: 'Home', component: () => import('@/views/client/Home.vue') },
       { path: 'about', name: 'About', component: () => import('@/views/client/About.vue') },
       { path: 'contact', name: 'PublicContact', component: () => import('@/views/client/Contact.vue') },
+      { path: 'enquire-now', name: 'EnquireNow', component: () => import('@/views/client/Contact.vue') },
       { path: 'faqs', name: 'Faqs', component: () => import('@/views/client/Faqs.vue') },
       { path: 'our-process', name: 'OurProcess', component: () => import('@/views/client/Process.vue') },
       { path: 'our-technology', name: 'OurTechnology', component: () => import('@/views/client/OurTechnology.vue') },
@@ -18,7 +19,7 @@ const routes = [
       },
       { path: 'why-modulux', name: 'WhyModulux', component: () => import('@/views/client/WhyModulux.vue') },
       { path: 'blogs', name: 'PublicBlogs', component: () => import('@/views/client/BlogsPublic.vue') },
-      { path: 'blogs/:id', name: 'BlogDetail', component: () => import('@/views/client/BlogDetail.vue') },
+      { path: 'blogs/:slug', name: 'BlogDetail', component: () => import('@/views/client/BlogDetail.vue') },
       { path: 'projects', name: 'ProjectsPublic', component: () => import('@/views/client/ProjectsPublic.vue') },
       { path: 'projects/:id', name: 'ProjectDetail', component: () => import('@/views/client/ProjectDetail.vue') },
 
@@ -60,7 +61,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior() {
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+
+    if (to.path === from.path && to.path === '/blogs') {
+      return false
+    }
+
     return { top: 0 }
   },
 })
