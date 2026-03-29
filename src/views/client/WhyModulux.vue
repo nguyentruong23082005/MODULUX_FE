@@ -1,5 +1,20 @@
-﻿<template>
+<template>
   <div class="why-page">
+    <section class="why-hero">
+      <div class="why-hero__bg">
+        <img src="/images/home/nen.avif" alt="Why Modulux" loading="lazy" />
+      </div>
+      <div class="why-hero__overlay"></div>
+
+      <div class="container-custom why-hero__inner">
+        <h1 data-aos="fade-up" data-aos-offset="20" data-aos-delay="50">Why Modulux</h1>
+        <p data-aos="fade-up" data-aos-offset="20" data-aos-delay="80">
+          As one of the most modern and internationally standardized factories in Southeast Asia,
+          our entire production process is 100% vertically integrated in Vietnam.
+        </p>
+      </div>
+    </section>
+
     <section class="why-intro">
       <div class="container-custom why-intro__grid">
         <div
@@ -177,6 +192,12 @@
       </div>
     </section>
 
+    <FactoryVideo
+      location="faq"
+      section-class="why-video-section-bottom"
+      :fallback-videos="whyModuluxFallbacks"
+    />
+
     <section class="why-faq">
       <div class="container-custom">
         <h2>Frequently Asked Questions About Projects</h2>
@@ -208,14 +229,24 @@
         </div>
       </div>
     </section>
+
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+import FactoryVideo from '@/components/client/home/FactoryVideo.vue'
 import publicApi from '@/services/publicApi'
 
 const whyImageBase = '/images/home/Key%20Features/why-modulux'
+
+const whyModuluxFallbacks = [
+  {
+    title: "A Tour of Modulux Homes' Cutting-Edge Factory",
+    videoUrl: 'https://www.youtube.com/watch?v=F0OqN-H_yMc',
+    thumbnailUrl: '/images/MODULUXFACTORYTOUR.jpg',
+  },
+]
 
 const featureCards = [
   {
@@ -377,11 +408,106 @@ onMounted(fetchProjects)
 .why-page {
   background: #ececec;
   color: #1f2226;
-  padding-top: 80px;
+}
+
+.why-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 430px;
+  padding-top: 44px;
+  padding-bottom: 152px;
+  background: linear-gradient(122deg, #073640 0%, #0a6c72 58%, #075a62 100%);
+}
+
+.why-hero__bg,
+.why-hero__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.why-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.2;
+  filter: saturate(0.65) contrast(0.95) brightness(0.68);
+}
+
+.why-hero__overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(2, 44, 51, 0.84) 0%,
+    rgba(4, 78, 86, 0.62) 48%,
+    rgba(4, 86, 95, 0.34) 100%
+  );
+}
+
+.why-hero__inner {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+}
+
+.why-hero__inner h1 {
+  margin: 0;
+  max-width: 760px;
+  font-size: clamp(2.05rem, 3.6vw, 3.25rem);
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.why-hero__inner p {
+  margin: 1.85rem 0 0;
+  max-width: 680px;
+  color: rgba(229, 236, 240, 0.94);
+  font-size: clamp(1rem, 1.34vw, 1.14rem);
+  line-height: 1.62;
+}
+
+:deep(.why-video-section-bottom) {
+  position: relative;
+  padding: 80px 0;
+  background: #ffffff;
+}
+
+:deep(.why-video-section-bottom .video-hero__shell) {
+  width: min(calc(100% - 48px), 1512px);
+  margin: 0 auto;
+}
+
+:deep(.why-video-section-bottom .video-hero__media) {
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+}
+
+:deep(.why-video-section-bottom .video-hero__background),
+:deep(.why-video-section-bottom .video-hero__overlay) {
+  min-height: clamp(480px, 50vw, 680px);
+}
+
+:deep(.why-video-section-bottom .video-hero__overlay) {
+  padding: 80px clamp(24px, 4vw, 64px) 160px;
+}
+
+:deep(.why-video-section-bottom .video-hero__title) {
+  font-size: clamp(2rem, 3.4vw, 3.2rem);
+  max-width: 680px;
+  line-height: 1.1;
+}
+
+:deep(.why-video-section-bottom .video-hero__thumb-rail) {
+  bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  :deep(.why-video-section-bottom) {
+    padding: 50px 0;
+  }
 }
 
 .why-intro {
-  padding: 14px 0 8px;
+  padding: 34px 0 12px;
 }
 
 .why-intro__grid {
@@ -649,6 +775,7 @@ onMounted(fetchProjects)
   line-height: 1.65;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
@@ -828,6 +955,45 @@ onMounted(fetchProjects)
     font-size: 1.1rem;
     padding-top: 16px;
     padding-bottom: 16px;
+  }
+}
+@media (max-width: 767px) {
+  .why-page {
+    overflow: hidden;
+  }
+
+  .why-hero {
+    min-height: 378px;
+    padding-top: 26px;
+    padding-bottom: 108px;
+  }
+
+  .why-hero__inner h1 {
+    font-size: 2rem;
+  }
+
+  .why-hero__inner p {
+    margin-top: 1.1rem;
+    font-size: 0.97rem;
+  }
+
+  :deep(.why-video-section) {
+    margin-top: -40px;
+    padding-bottom: 34px;
+  }
+
+  :deep(.why-video-section .video-hero__shell) {
+    width: calc(100% - 24px);
+  }
+
+  :deep(.why-video-section .video-hero__background),
+  :deep(.why-video-section .video-hero__overlay) {
+    min-height: 505px;
+  }
+
+  :deep(.why-video-section .video-hero__overlay) {
+    padding-top: 56px;
+    padding-bottom: 156px;
   }
 }
 </style>
