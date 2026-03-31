@@ -4,7 +4,7 @@
       <h2 class="text-xl font-bold text-gray-800">Email Subscribers</h2>
     </div>
     
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead class="bg-gray-50 text-gray-700 uppercase text-xs font-semibold">
           <tr>

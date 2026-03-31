@@ -5,7 +5,7 @@
       <button @click="openModal()" class="bg-black hover:bg-brand text-white px-4 py-2 rounded shadow-sm text-sm font-medium transition-colors">Add Feature</button>
     </div>
     
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead class="bg-gray-50 text-gray-700 uppercase text-xs font-semibold">
           <tr>

@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div class="overflow-hidden overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
       <table class="w-full border-collapse text-left">
         <thead class="bg-gray-50 text-xs font-semibold uppercase text-gray-700">
           <tr>
@@ -140,7 +140,7 @@
       <div class="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white p-6 shadow-xl">
         <h3 class="mb-4 text-lg font-bold">{{ isEditing ? 'Edit Video' : 'Add Video' }}</h3>
         <form @submit.prevent="saveVideo" class="space-y-5">
-          <div class="grid gap-4 md:grid-cols-2">
+          <div class="grid gap-4 md:grid-cols-1 sm:grid-cols-2">
             <div>
               <label class="mb-1 block text-sm font-medium">
                 Title <span class="text-red-500">*</span>
@@ -196,7 +196,7 @@
             </p>
           </div>
 
-          <div class="grid gap-4 md:grid-cols-2">
+          <div class="grid gap-4 md:grid-cols-1 sm:grid-cols-2">
             <div>
               <label class="mb-1 block text-sm font-medium">
                 Poster URL <span class="text-red-500">*</span>
@@ -276,7 +276,7 @@
             </div>
           </div>
 
-          <div class="grid gap-4 md:grid-cols-2">
+          <div class="grid gap-4 md:grid-cols-1 sm:grid-cols-2">
             <div>
               <label class="mb-1 block text-sm font-medium">Display Order</label>
               <input

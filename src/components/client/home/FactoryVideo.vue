@@ -6,6 +6,7 @@
     play-sub-label="Video"
     :video-location="location"
     :section-class="resolvedSectionClass"
+    :fallback-videos="fallbackVideos"
   />
 </template>
 
@@ -21,6 +22,10 @@ const props = defineProps({
   sectionClass: {
     type: String,
     default: '',
+  },
+  fallbackVideos: {
+    type: Array,
+    default: () => [],
   },
 })
 

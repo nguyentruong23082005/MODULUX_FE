@@ -70,7 +70,12 @@
           @click="goDetail(project.slug)"
         >
           <div class="projects-card__image-wrap">
-            <img class="projects-card__image" :src="project.cardImage" :alt="project.title" />
+            <img
+              class="projects-card__image"
+              :src="project.cardImage"
+              :alt="project.title"
+              @error="handleProjectImageError($event, project)"
+            />
           </div>
 
           <div class="projects-card__body">
@@ -149,11 +154,13 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import publicApi from '@/services/publicApi'
 import VideoHero from '@/components/client/VideoHero.vue'
+import { resolveMediaUrl } from '@/utils/media'
 
 const router = useRouter()
 const projectsRef = ref(null)
 const projects = ref([])
 const visibleCount = ref(6)
+const PROJECT_FALLBACK_IMAGE = '/images/home/project/jp1/pj1.png'
 
 const bedroomOptions = ['any', 1, 2, 3, 4, 5]
 const bathroomOptions = ['any', 1, 2, 3, 4]
@@ -221,6 +228,27 @@ const goDetail = (slug) => {
   router.push(`/projects/${slug}`)
 }
 
+const getProjectPrimaryImage = (item) => {
+  const heroImage = item.images?.find((img) => img.is_hero)?.image_url
+  return resolveMediaUrl(heroImage || item.thumbnail_url || PROJECT_FALLBACK_IMAGE)
+}
+
+const getProjectFallbackImage = (item) => {
+  const floorPlanImage = item.images?.find((img) => img.is_floor_plan)?.image_url
+  const heroImage = item.images?.find((img) => img.is_hero)?.image_url
+  return resolveMediaUrl(floorPlanImage || heroImage || item.floor_plan_url || PROJECT_FALLBACK_IMAGE)
+}
+
+const handleProjectImageError = (event, project) => {
+  const fallbackImage = project.fallbackCardImage || PROJECT_FALLBACK_IMAGE
+  if (event.target.dataset.fallbackApplied === 'true') {
+    event.target.src = PROJECT_FALLBACK_IMAGE
+    return
+  }
+  event.target.dataset.fallbackApplied = 'true'
+  event.target.src = fallbackImage
+}
+
 const scrollToProjects = () => {
   if (!projectsRef.value) return
   const offsetTop = projectsRef.value.getBoundingClientRect().top + window.scrollY - 110
@@ -237,7 +265,8 @@ const fetchProjects = async () => {
       bathrooms: Number(item.bathrooms || 1),
       area: Number(item.area || item.area_sqft || 500),
       shortDescription: item.short_description || item.summary || item.description || 'Installation time varies by project scope.',
-      cardImage: item.thumbnail_url || '/images/home/project/jp1/pj1_1.jpg',
+      cardImage: getProjectPrimaryImage(item),
+      fallbackCardImage: getProjectFallbackImage(item),
     }))
   } catch (error) {
     console.error('Unable to fetch projects:', error)

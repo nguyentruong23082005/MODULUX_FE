@@ -10,7 +10,7 @@
       </button>
     </div>
 
-    <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div class="overflow-hidden overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
       <table class="w-full border-collapse text-left">
         <thead class="bg-gray-50 text-xs font-semibold uppercase text-gray-700">
           <tr>
@@ -124,7 +124,7 @@
             />
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="mb-1 block text-sm font-medium">CTA Button Text <span class="text-red-500">*</span></label>
               <input

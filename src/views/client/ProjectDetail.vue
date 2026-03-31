@@ -279,10 +279,12 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import publicApi from '@/services/publicApi'
+import { resolveMediaUrl } from '@/utils/media'
 
 const route = useRoute()
 const project = ref(null)
 const relatedProjects = ref([])
+const PROJECT_FALLBACK_IMAGE = '/images/home/project/jp1/pj1.png'
 
 // Lightbox state
 const galleryActive = ref(false)
@@ -302,11 +304,13 @@ const fetchProject = async () => {
     const slug = route.params.id
     const res = await publicApi.get(`/api/v1/projects/slug/${slug}`)
     const p = res.data
+    const heroImage = p.images?.find((img) => img.is_hero)?.image_url
+    const floorPlanImage = p.floor_plan_url || p.images?.find((img) => img.is_floor_plan)?.image_url
     project.value = {
       ...p,
-      heroImage: p.images?.find(img => img.is_hero)?.image_url || p.thumbnail_url || '/images/2K(10)',
-      gallery: p.images?.filter(img => !img.is_hero && !img.is_floor_plan).map(img => img.image_url) || [],
-      floorPlanImage: p.floor_plan_url || p.images?.find(img => img.is_floor_plan)?.image_url || null,
+      heroImage: resolveMediaUrl(heroImage || p.thumbnail_url || PROJECT_FALLBACK_IMAGE),
+      gallery: p.images?.filter(img => !img.is_hero && !img.is_floor_plan).map(img => resolveMediaUrl(img.image_url)) || [],
+      floorPlanImage: floorPlanImage ? resolveMediaUrl(floorPlanImage) : null,
       areaSqft: p.area_sqft || 0,
       summary: p.description,
       videoUrl: p.video_url?.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/'),
@@ -322,7 +326,7 @@ const fetchRelatedProjects = async () => {
     const res = await publicApi.get('/api/v1/projects/', { params: { limit: 4 } })
     relatedProjects.value = res.data.filter(p => p.slug !== route.params.id).slice(0, 3).map(p => ({
       ...p,
-      cardImage: p.thumbnail_url || '/images/2K(10)',
+      cardImage: resolveMediaUrl(p.images?.find((img) => img.is_hero)?.image_url || p.thumbnail_url || PROJECT_FALLBACK_IMAGE),
       installTime: p.installation_time || 'Modular'
     }))
   } catch (err) { console.error(err) }

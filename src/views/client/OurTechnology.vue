@@ -1,28 +1,21 @@
 ﻿<template>
   <div class="our-tech-page">
     <section class="tech-hero">
-      <div class="tech-hero__bg">
-        <img src="/images/home/nen.avif" alt="Our Technology" loading="lazy" />
-      </div>
-      <div class="tech-hero__overlay"></div>
-
       <div class="container-custom tech-hero__inner">
         <div class="tech-hero__copy" data-aos="fade-up" data-aos-offset="20" data-aos-delay="50">
           <h1>Our Technology</h1>
           <p>
-            Modulux Homes employs the most advanced construction technologies to guarantee superior
-            quality and performance for every project.
+            Modulux Homes employs the most advanced construction technologies to guarantee
+            superior quality and performance for every project
           </p>
         </div>
       </div>
     </section>
 
-    <VideoHero
-      heading="A Tour of Modulux Homes' Cutting-Edge Factory"
-      heading-tag="h2"
-      play-label="Autoplay"
-      play-sub-label="Video"
+    <FactoryVideo
+      location="faq"
       section-class="our-tech-video"
+      :fallback-videos="ourTechnologyFaqFallbacks"
     />
 
     <section class="tech-section">
@@ -30,26 +23,28 @@
         <article class="tech-structure__copy" data-aos="fade-up" data-aos-offset="20" data-aos-delay="50">
           <h2>Structure Solution</h2>
           <p>
-            Steel Frame: Manufactured from high-strength galvanized steel using fully automated
-            systems, offering dimensions from 89mm to 250mm for diverse project requirements.
+            - Steel Frame: Manufactured from high-strength galvanized steel using fully automated
+            FRAMER X5 and X3 systems, offering a wide range of dimensions from 89mm to 250mm.
+            This provides exceptional flexibility to meet the specific requirements of diverse
+            projects.
           </p>
           <p>
-            Wood Frame: Utilizing internationally standardized wood treatment technology to meet
-            architectural and performance requirements.
+            - Wood Frame : Utilizing internationally standardized wood treatment technology, our
+            timber frames can meet all demands of architectural building projects.
           </p>
           <p>
-            Steel & Wood Frame: The floor can be combined with a steel frame and the walls with a
-            wooden frame for flexible design customization.
+            - Steel & Wood Frame:The floor can be combined with a steel frame and the walls with a
+            wooden frame, allowing flexible design customization
           </p>
         </article>
 
         <article class="tech-structure__card" data-aos="fade-up" data-aos-offset="20" data-aos-delay="100">
-          <img src="/images/home/Key%20Features/why-modulux/kf1.png" alt="Steel Frame" loading="lazy" />
+          <img :src="`${technologyImageBase}/Stee1_Frame.avif`" alt="Steel Frame" loading="lazy" />
           <p>Steel Frame</p>
         </article>
 
         <article class="tech-structure__card" data-aos="fade-up" data-aos-offset="20" data-aos-delay="150">
-          <img src="/images/home/Key%20Features/why-modulux/kh1.png" alt="Wood Frame" loading="lazy" />
+          <img :src="`${technologyImageBase}/Wood_Frame.avif`" alt="Wood Frame" loading="lazy" />
           <p>Wood Frame</p>
         </article>
       </div>
@@ -61,7 +56,7 @@
 
         <div class="tech-flow__track">
           <div class="tech-flow__item" data-aos="fade-right" data-aos-offset="20" data-aos-delay="50">
-            <img src="/images/our-tech-flow-1.jpg" alt="Factory prefabrication" loading="lazy" />
+            <img :src="`${technologyImageBase}/2K (1).avif`" alt="Modular construction step 1" loading="lazy" />
           </div>
 
           <div class="tech-flow__arrow" aria-hidden="true">
@@ -70,7 +65,7 @@
           </div>
 
           <div class="tech-flow__item" data-aos="fade-right" data-aos-offset="20" data-aos-delay="200">
-            <img src="/images/our-tech-flow-2.jpg" alt="Module transport" loading="lazy" />
+            <img :src="`${technologyImageBase}/2K (2).avif`" alt="Modular construction step 2" loading="lazy" />
           </div>
 
           <div class="tech-flow__arrow" aria-hidden="true">
@@ -79,7 +74,7 @@
           </div>
 
           <div class="tech-flow__item" data-aos="fade-right" data-aos-offset="20" data-aos-delay="350">
-            <img src="/images/our-tech-flow-3.jpg" alt="On-site installation" loading="lazy" />
+            <img :src="`${technologyImageBase}/2K.avif`" alt="Modular construction step 3" loading="lazy" />
           </div>
         </div>
       </div>
@@ -87,49 +82,56 @@
 
     <section class="tech-section">
       <div class="container-custom tech-installation">
-        <article class="tech-installation__copy" data-aos="fade-up" data-aos-offset="20" data-aos-delay="50">
-          <h3>Panelized Installation</h3>
-          <p>
-            Panels are manufactured at our factory and transported to site. The structural frame is
-            erected on foundation first, then each panel is installed to form a complete house.
-          </p>
-        </article>
+        <div class="tech-installation__row tech-installation__row--panelized">
+          <article class="tech-installation__copy" data-aos="fade-up" data-aos-offset="20" data-aos-delay="50">
+            <h3>Panelized Installation</h3>
+            <p>
+              The panels are manufactured at our factory and then transported to the installation
+              site. Upon arrival, the structural frame is erected on the foundation, followed by the
+              installation of each individual panel, ultimately forming a complete house.
+            </p>
+          </article>
 
-        <article class="tech-installation__media" data-aos="fade-up" data-aos-offset="20" data-aos-delay="90">
-          <img
-            src="/images/home/Key%20Features/key-feature-technology.png"
-            alt="Panelized installation"
-            loading="lazy"
-          />
-        </article>
+          <article class="tech-installation__media" data-aos="fade-up" data-aos-offset="20" data-aos-delay="90">
+            <img
+              :src="`${technologyImageBase}/Panelized1.avif`"
+              alt="Panelized installation overview"
+              loading="lazy"
+            />
+          </article>
 
-        <article class="tech-installation__media" data-aos="fade-up" data-aos-offset="20" data-aos-delay="120">
-          <img
-            src="/images/home/Key%20Features/why-modulux/2K%20(2).avif"
-            alt="Panelized installation process"
-            loading="lazy"
-          />
-        </article>
+          <article class="tech-installation__media" data-aos="fade-up" data-aos-offset="20" data-aos-delay="120">
+            <img
+              :src="`${technologyImageBase}/Panelized2.png`"
+              alt="Panelized installation process"
+              loading="lazy"
+            />
+          </article>
+        </div>
 
-        <article class="tech-installation__media" data-aos="fade-up" data-aos-offset="20" data-aos-delay="150">
-          <img src="/images/home/Key%20Features/why-modulux/2K.avif" alt="Block installation" loading="lazy" />
-        </article>
+        <div class="tech-installation__row tech-installation__row--block">
+          <article class="tech-installation__media" data-aos="fade-up" data-aos-offset="20" data-aos-delay="150">
+            <img :src="`${technologyImageBase}/Block1.png`" alt="Block installation" loading="lazy" />
+          </article>
 
-        <article class="tech-installation__media" data-aos="fade-up" data-aos-offset="20" data-aos-delay="180">
-          <img
-            src="/images/home/Key%20Features/why-modulux/2K%20(1).avif"
-            alt="Block installation process"
-            loading="lazy"
-          />
-        </article>
+          <article class="tech-installation__media" data-aos="fade-up" data-aos-offset="20" data-aos-delay="180">
+            <img
+              :src="`${technologyImageBase}/Block2.png`"
+              alt="Block installation process"
+              loading="lazy"
+            />
+          </article>
 
-        <article class="tech-installation__copy" data-aos="fade-up" data-aos-offset="20" data-aos-delay="50">
-          <h3>Block Installation</h3>
-          <p>
-            Complete modules are pre-assembled in factory and delivered to site, where modules are
-            connected on prepared foundations to complete the house quickly.
-          </p>
-        </article>
+          <article class="tech-installation__copy" data-aos="fade-up" data-aos-offset="20" data-aos-delay="210">
+            <h3>Block Installation</h3>
+            <p>
+              The panels are pre-installed into the structural frame at our factory to create
+              modules (including the structural frame itself). Upon arrival at the installation
+              site, the modules are assembled together on the prepared foundation, ultimately
+              forming a complete house.
+            </p>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -138,19 +140,21 @@
         <div class="tech-lgs__intro-grid">
           <article class="tech-lgs__intro" data-aos="fade-up" data-aos-offset="20" data-aos-delay="50">
             <h2>LGS Modular Buildings</h2>
-            <h3>Applications of LGS Modular Buildings</h3>
+            <h3>Applications of LGS Modular Buildings:</h3>
             <p>
-              Residential: single-family homes, townhouses, duplexes, triplexes, condominiums, and
-              accessory dwelling units.
+              Residential: This includes single-family homes and multi-family residences such as
+              townhouses, duplexes, triplexes, and condominiums, as well as accessory dwelling units
+              (ADUs).
             </p>
             <p>
-              Commercial: offices, retail, service buildings, supermarkets, shopping centers,
-              hotels, restaurants, schools, and hospitals.
+              Commercial: These structures are designed for commercial purposes, including rental
+              properties, retail spaces, service facilities like offices, supermarkets, shopping
+              centers, hotels, restaurants, schools, and hospitals (without residential functions).
             </p>
           </article>
 
           <div class="tech-lgs__hero" data-aos="fade-up" data-aos-offset="20" data-aos-delay="90">
-            <img src="/images/our-tech-lgs.jpg" alt="LGS modular building application" loading="lazy" />
+            <img :src="`${technologyImageBase}/LGSModular.webp`" alt="LGS modular building application" loading="lazy" />
           </div>
         </div>
 
@@ -171,8 +175,12 @@
         <div class="tech-lgs__materials" data-aos="fade-up" data-aos-offset="20" data-aos-delay="50">
           <h3>Using materials from reputable and renowned global brands</h3>
           <p>
-            With a team of experienced architects and engineers, Modulux provides modular building
-            solutions aligned with ASTM standards and high sustainability goals.
+            With a team of experienced architects and engineers, TranDuc is fully capable of meeting
+            all the stringent demands of the market by providing modular building solutions that
+            comply with ASTM standards. We utilize materials from leading global brands such as
+            Saint Gobain, Dupont, Leviton, and Ferguson, focusing on sustainability. Our material
+            systems not only meet prestigious global standards but are also environmentally friendly
+            and aimed at achieving Net Zero, maximizing energy savings.
           </p>
         </div>
 
@@ -233,7 +241,48 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { getBlogs } from '@/services/blogApi'
-import VideoHero from '@/components/client/VideoHero.vue'
+import FactoryVideo from '@/components/client/home/FactoryVideo.vue'
+
+const technologyImageBase = '/images/home/our-technology'
+
+const ourTechnologyFaqFallbacks = [
+  {
+    title: "A Tour of Modulux Homes' Cutting-Edge Factory",
+    videoUrl: 'https://www.youtube.com/watch?v=F0OqN-H_yMc',
+    posterUrl: '/images/MODULUXFACTORYTOUR.jpg',
+    thumbnailUrl: '/images/ModuluxLuxuryPrefabHomes.jpg',
+    thumbnailLabel: 'Modulux Luxury Prefab Homes | Ecolux',
+    displayOrder: 1,
+    isActive: true,
+  },
+  {
+    title: 'Goverment Housing Solutions | Ecolux',
+    videoUrl: 'https://www.youtube.com/watch?v=F0OqN-H_yMc',
+    posterUrl: '/images/MODULUXFACTORYTOUR.jpg',
+    thumbnailUrl: '/images/Ecolux-Overview-768x512.png',
+    thumbnailLabel: 'Goverment Housing Solutions | Ecolux',
+    displayOrder: 2,
+    isActive: true,
+  },
+  {
+    title: 'Garden View Suite | Ecolux',
+    videoUrl: 'https://www.youtube.com/watch?v=F0OqN-H_yMc',
+    posterUrl: '/images/MODULUXFACTORYTOUR.jpg',
+    thumbnailUrl: '/images/gardensuite.PNG',
+    thumbnailLabel: 'Garden View Suite | Ecolux',
+    displayOrder: 3,
+    isActive: true,
+  },
+  {
+    title: 'Garden Villa | Ecolux',
+    videoUrl: 'https://www.youtube.com/watch?v=F0OqN-H_yMc',
+    posterUrl: '/images/MODULUXFACTORYTOUR.jpg',
+    thumbnailUrl: '/images/gardenvilla.PNG',
+    thumbnailLabel: 'Garden Villa | Ecolux',
+    displayOrder: 4,
+    isActive: true,
+  },
+]
 
 const partnerLogos = [
   '/images/home/Partners1.webp',
@@ -252,31 +301,34 @@ const repeatedLogos = computed(() => [...partnerLogos, ...partnerLogos])
 
 const lgsBenefits = [
   {
-    title: 'Shortening construction time',
+    title: 'Shortening construction time:',
     points: [
-      'Construction is up to 50% faster than traditional methods.',
+      'Construction is 50% faster compared to traditional building methods.',
       'Project completion can be achieved within 30 to 45 days.',
     ],
   },
   {
-    title: 'Sustainable quality',
+    title: 'Sustainable quality:',
     points: [
-      'LGS structures are highly resistant to earthquakes, strong winds, and snowstorms.',
-      'Material systems reduce termite and mold risks and improve long-term durability.',
+      'LGS (Light Gauge Steel) structures are highly resistant to earthquakes, strong winds, and snowstorms.',
+      'The use of Thermo and H-grade technology helps prevent termite and mold infestations.',
+      'Fire-resistant materials meet NFPA and UL standards.',
     ],
   },
   {
-    title: 'Reducing investment costs',
+    title: 'Reducing investment costs:',
     points: [
-      'Labor cost can be reduced significantly with synchronized modular assembly.',
-      'Overall cost saving through minimized waste and controlled production.',
+      'Labor costs can be reduced by 70% thanks to the synchronized modular assembly model.',
+      'Overall costs can be saved by 20% to 30%, minimizing material waste.',
+      'Insurance costs for the project and labor can be decreased by 75% due to the safety and compliance of the material systems.',
     ],
   },
   {
-    title: 'Sustainable construction',
+    title: 'Sustainable construction:',
     points: [
-      'Construction waste and on-site disruption are minimized.',
-      'Energy-efficient systems help reduce annual heating and cooling costs.',
+      'Waste generation at the construction site is minimized.',
+      'Environmentally friendly materials are used, resulting in lower CO2 emissions.',
+      'Compliance with Title-24 energy standards currently set in the U.S. ensures stable indoor temperatures, energy efficiency, and reduced heating, cooling, and annual electricity costs.',
     ],
   },
 ]
@@ -329,59 +381,77 @@ onMounted(fetchRelatedBlogs)
 .tech-hero {
   position: relative;
   overflow: hidden;
-  min-height: 300px;
-}
-
-.tech-hero__bg,
-.tech-hero__overlay {
-  position: absolute;
-  inset: 0;
-}
-
-.tech-hero__bg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.tech-hero__overlay {
-  background: linear-gradient(90deg, rgba(10, 17, 28, 0.82) 0%, rgba(10, 17, 28, 0.58) 55%, rgba(10, 17, 28, 0.3) 100%);
+  min-height: 296px;
+  background:
+    linear-gradient(90deg, rgba(2, 44, 51, 0.84) 0%, rgba(4, 78, 86, 0.62) 48%, rgba(4, 86, 95, 0.34) 100%),
+    url('/images/home/nen.avif') center / cover no-repeat;
 }
 
 .tech-hero__inner {
-  position: relative;
-  z-index: 1;
-  min-height: 300px;
+  min-height: 296px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 32px;
 }
 
 .tech-hero__copy {
-  max-width: 780px;
   color: #ffffff;
+  max-width: 560px;
 }
 
 .tech-hero__copy h1 {
   margin: 0;
-  font-size: clamp(2rem, 5vw, 3.7rem);
-  line-height: 1.02;
+  font-size: clamp(2rem, 3.2vw, 2.9rem);
+  line-height: 1.04;
+  font-weight: 700;
 }
 
 .tech-hero__copy p {
-  margin: 14px 0 0;
-  max-width: 680px;
-  font-size: 1rem;
-  line-height: 1.75;
-  color: #e5e9ef;
+  margin: 4.6rem 0 0;
+  color: rgba(234, 239, 242, 0.95);
+  font-size: 0.98rem;
+  line-height: 1.68;
 }
 
 :deep(.our-tech-video) {
-  background: #ffffff;
-  padding-bottom: 8px;
+  position: relative;
+  z-index: 3;
+  margin-top: -118px;
+  padding: 0 0 42px;
+  background: transparent;
+}
+
+:deep(.our-tech-video .video-hero__shell) {
+  width: min(calc(100% - 48px), 1128px);
+  margin: 0 auto;
+}
+
+:deep(.our-tech-video .video-hero__media) {
+  overflow: hidden;
+  box-shadow: 0 20px 44px rgba(9, 17, 25, 0.22);
+}
+
+:deep(.our-tech-video .video-hero__background),
+:deep(.our-tech-video .video-hero__overlay) {
+  min-height: clamp(500px, 56vw, 660px);
+}
+
+:deep(.our-tech-video .video-hero__overlay) {
+  padding: 92px clamp(24px, 4vw, 64px) 172px;
+}
+
+:deep(.our-tech-video .video-hero__title) {
+  font-size: clamp(2.2rem, 3.8vw, 3.55rem);
+  max-width: 620px;
+}
+
+:deep(.our-tech-video .video-hero__thumb-strip) {
+  bottom: 16px;
+  width: min(72vw, 840px);
 }
 
 .tech-section {
-  padding: 26px 0;
+  padding: 26px 0 18px;
 }
 
 .tech-structure {
@@ -406,7 +476,7 @@ onMounted(fetchRelatedBlogs)
   margin: 0;
   color: #4b5057;
   font-size: 0.95rem;
-  line-height: 1.74;
+  line-height: 1.7;
 }
 
 .tech-structure__card {
@@ -436,17 +506,24 @@ onMounted(fetchRelatedBlogs)
 }
 
 .tech-flow__track {
-  margin-top: 0.9rem;
+  margin-top: 1.3rem;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 1rem;
+  align-items: center;
+}
+
+.tech-flow__item {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .tech-flow__item img {
-  width: 100%;
-  height: 100%;
-  min-height: 170px;
-  max-height: 320px;
+  width: min(100%, 230px);
+  height: auto;
+  min-height: 0;
+  max-height: none;
   object-fit: contain;
 }
 
@@ -455,7 +532,7 @@ onMounted(fetchRelatedBlogs)
   align-items: center;
   justify-content: center;
   color: #3d4046;
-  font-size: 1.7rem;
+  font-size: 2rem;
 }
 
 .tech-flow__arrow--desktop {
@@ -467,9 +544,15 @@ onMounted(fetchRelatedBlogs)
 }
 
 .tech-installation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.tech-installation__row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.85rem;
+  gap: 0.9rem;
 }
 
 .tech-installation__copy {
@@ -477,6 +560,7 @@ onMounted(fetchRelatedBlogs)
   flex-direction: column;
   gap: 0.5rem;
   padding-top: 0.2rem;
+  justify-content: flex-end;
 }
 
 .tech-installation__copy h3 {
@@ -501,8 +585,8 @@ onMounted(fetchRelatedBlogs)
 }
 
 .tech-lgs {
-  background: #f4f5f6;
-  padding: 36px 0;
+  background: #ffffff;
+  padding: 28px 0 22px;
 }
 
 .tech-lgs__intro-grid {
@@ -537,32 +621,35 @@ onMounted(fetchRelatedBlogs)
 }
 
 .tech-lgs__benefits {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.6rem;
+  gap: 0.85rem 1.6rem;
 }
 
 .tech-lgs__benefit {
-  background: #ffffff;
-  border: 1px solid #e4e6e8;
-  padding: 1rem;
+  padding: 0 0.75rem 0 0;
 }
 
 .tech-lgs__benefit h4 {
   margin: 0;
   font-size: 1rem;
+  font-weight: 700;
+}
+
+.tech-lgs__benefit h4::before {
+  content: "\2022  ";
 }
 
 .tech-lgs__benefit p {
-  margin: 0.45rem 0 0;
+  margin: 0.28rem 0 0;
   color: #515860;
   font-size: 0.9rem;
   line-height: 1.65;
 }
 
 .tech-lgs__materials {
-  margin-top: 1.1rem;
+  margin-top: 1.5rem;
 }
 
 .tech-lgs__materials h3 {
@@ -693,6 +780,18 @@ onMounted(fetchRelatedBlogs)
 }
 
 @media (min-width: 768px) {
+  .tech-hero {
+    min-height: 320px;
+  }
+
+  .tech-hero__inner {
+    min-height: 320px;
+  }
+
+  .tech-hero__copy p {
+    margin-top: 5rem;
+  }
+
   .tech-structure {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -704,16 +803,18 @@ onMounted(fetchRelatedBlogs)
   .tech-flow__track {
     flex-direction: row;
     align-items: center;
-    gap: 0.6rem;
+    justify-content: flex-start;
+    gap: 1.2rem;
   }
 
   .tech-flow__item {
-    flex: 1;
+    flex: 0 0 auto;
+    width: auto;
   }
 
   .tech-flow__arrow {
-    width: 36px;
-    flex: 0 0 36px;
+    width: 46px;
+    flex: 0 0 46px;
   }
 
   .tech-flow__arrow--desktop {
@@ -724,7 +825,7 @@ onMounted(fetchRelatedBlogs)
     display: none;
   }
 
-  .tech-installation {
+  .tech-installation__row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -745,13 +846,17 @@ onMounted(fetchRelatedBlogs)
 }
 
 @media (min-width: 1024px) {
-  .tech-hero,
+  .tech-hero {
+    min-height: 336px;
+  }
+
   .tech-hero__inner {
-    min-height: 360px;
+    min-height: 336px;
+    padding-top: 34px;
   }
 
   .tech-section {
-    padding: 34px 0;
+    padding: 34px 0 22px;
   }
 
   .tech-structure {
@@ -764,14 +869,14 @@ onMounted(fetchRelatedBlogs)
   }
 
   .tech-flow__track {
-    gap: 0.95rem;
+    gap: 1.4rem;
   }
 
   .tech-flow__item img {
-    min-height: 300px;
+    width: 250px;
   }
 
-  .tech-installation {
+  .tech-installation__row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -781,13 +886,49 @@ onMounted(fetchRelatedBlogs)
   }
 
   .tech-lgs__benefits {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.8rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 2.4rem;
   }
 
   .tech-marquee__track img {
     width: 138px;
     height: 56px;
+  }
+}
+
+@media (max-width: 767px) {
+  .tech-hero {
+    min-height: 272px;
+  }
+
+  .tech-hero__inner {
+    min-height: 272px;
+    padding-top: 24px;
+  }
+
+  .tech-hero__copy p {
+    margin-top: 2.6rem;
+    max-width: 320px;
+    font-size: 0.92rem;
+  }
+
+  :deep(.our-tech-video) {
+    margin-top: -88px;
+    padding-bottom: 34px;
+  }
+
+  :deep(.our-tech-video .video-hero__shell) {
+    width: calc(100% - 24px);
+  }
+
+  :deep(.our-tech-video .video-hero__background),
+  :deep(.our-tech-video .video-hero__overlay) {
+    min-height: 505px;
+  }
+
+  :deep(.our-tech-video .video-hero__overlay) {
+    padding-top: 56px;
+    padding-bottom: 156px;
   }
 }
 

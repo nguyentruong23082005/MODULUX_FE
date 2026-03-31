@@ -81,7 +81,7 @@
               </div>
             </div>
 
-            <div class="mt-5 grid gap-4 md:grid-cols-2">
+            <div class="mt-5 grid gap-4 md:grid-cols-1 sm:grid-cols-2">
               <label class="space-y-2">
                 <span class="text-sm font-medium text-slate-700">Label</span>
                 <input v-model="item.label" type="text" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100" placeholder="About" />
@@ -131,7 +131,7 @@
                   </div>
                 </div>
 
-                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                <div class="mt-4 grid gap-4 md:grid-cols-1 sm:grid-cols-2">
                   <label class="space-y-2">
                     <span class="text-sm font-medium text-slate-700">Label</span>
                     <input v-model="child.label" type="text" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100" placeholder="Projects" />

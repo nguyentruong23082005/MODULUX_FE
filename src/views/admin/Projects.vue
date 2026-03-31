@@ -8,7 +8,7 @@
       </button>
     </div>
     
-    <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
@@ -48,12 +48,12 @@
           </button>
         </div>
         <form @submit.prevent="saveProject" class="p-6 space-y-5">
-          <div class="grid grid-cols-2 gap-5">
-            <div class="col-span-2">
+          <div class="grid grid-cols-1 sm:grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Project Title *</label>
               <input v-model="form.title" type="text" required class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none">
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">URL Slug (for SEO) *</label>
               <input v-model="form.slug" type="text" required placeholder="ex: luxury-villa-2026" class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none">
             </div>
@@ -85,60 +85,60 @@
               <label class="block text-sm font-semibold text-gray-700 mb-1">Kitchens</label>
               <input v-model="form.kitchens" type="number" class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none">
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Thumbnail URL</label>
               <input v-model="form.thumbnail_url" type="text" placeholder="https://..." class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none">
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Floor Plan URL</label>
               <input v-model="form.floor_plan_url" type="text" placeholder="https://..." class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none">
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Video URL (YouTube/Vimeo)</label>
               <input v-model="form.video_url" type="text" placeholder="https://..." class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none">
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Features (comma-separated)</label>
               <textarea v-model="form.features" rows="2" placeholder="Steel framework, Solar compatibility..." class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none"></textarea>
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Finishing Options (comma-separated)</label>
               <textarea v-model="form.finishing_options" rows="2" placeholder="Custom Roofs, Soundproof Doors..." class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none"></textarea>
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Short Description</label>
               <textarea v-model="form.description" rows="2" class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none"></textarea>
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Full Content (HTML allowed)</label>
               <textarea v-model="form.content" rows="4" class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none"></textarea>
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <hr class="my-4 border-gray-200" />
               <h4 class="font-bold text-gray-800 mb-4">SEO Settings</h4>
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Meta Title</label>
               <input v-model="form.meta_title" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none">
             </div>
-            <div class="col-span-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Meta Description</label>
               <textarea v-model="form.meta_description" rows="2" class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none"></textarea>
             </div>
-            <div class="col-span-2 flex items-center mt-2">
+            <div class="col-span-1 sm:col-span-1 sm:col-span-2 flex items-center mt-2">
               <input v-model="form.is_featured" type="checkbox" id="featured" class="w-4 h-4 text-black border-gray-300 rounded focus:ring-black">
               <label for="featured" class="ml-2 block text-sm font-semibold text-gray-700">Display as Featured Project</label>
             </div>
 
             <!-- Image Gallery Section (Only shown when editing) -->
-            <div v-if="isEditing" class="col-span-2">
+            <div v-if="isEditing" class="col-span-1 sm:col-span-1 sm:col-span-2">
               <hr class="my-4 border-gray-200" />
               <div class="flex justify-between items-center mb-4">
                 <h4 class="font-bold text-gray-800">Image Gallery</h4>
               </div>
 
               <!-- Add New Image -->
-              <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4 flex gap-4 items-end">
+              <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4 flex flex-col sm:flex-row gap-4 sm:items-end">
                 <div class="flex-grow">
                   <label class="block text-xs font-semibold text-gray-700 mb-1">New Image URL</label>
                   <input v-model="newImageUrl" type="text" placeholder="https://..." class="w-full border border-gray-300 rounded px-3 py-2 text-gray-900 focus:ring-1 focus:ring-black focus:border-black outline-none text-sm">

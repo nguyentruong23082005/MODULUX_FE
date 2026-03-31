@@ -5,7 +5,7 @@
       <button @click="openModal()" class="bg-black hover:bg-brand text-white px-4 py-2 rounded shadow-sm text-sm font-medium transition-colors">Add Page</button>
     </div>
     
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead class="bg-gray-50 text-gray-700 uppercase text-xs font-semibold">
           <tr>
@@ -62,7 +62,7 @@
           
           <!-- TAB 1: BASIC INFO -->
           <div v-if="activeTab === 'basic'" class="space-y-6">
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-1 sm:grid-cols-2 gap-6">
               <div class="space-y-1">
                 <label class="text-xs font-bold text-gray-500 uppercase">Page Title</label>
                 <input v-model="form.title" required class="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-black outline-none transition-all" placeholder="e.g. About Us" />
@@ -78,7 +78,7 @@
               <textarea v-model="form.content" rows="4" class="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-black outline-none transition-all" placeholder="HTML content if not using sections..."></textarea>
             </div>
 
-            <div class="grid grid-cols-2 gap-6 pt-4 border-t border-gray-50">
+            <div class="grid grid-cols-1 sm:grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-gray-50">
               <div class="space-y-1">
                 <label class="text-xs font-bold text-gray-500 uppercase">Meta Title (SEO)</label>
                 <input v-model="form.meta_title" class="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-black outline-none transition-all" />

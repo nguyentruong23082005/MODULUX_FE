@@ -21,7 +21,7 @@
         <div class="blogs-shell blogs-hero__shell">
           <h1 data-aos="fade-up" data-aos-offset="20" data-aos-delay="50" class="blogs-hero__title">News and Insights</h1>
 
-          <div v-if="heroLead" ref="heroLockAnchorRef" class="blogs-hero__desktop">
+          <div v-if="heroLead" ref="heroLockAnchorRef" class="blogs-hero__desktop" @wheel.prevent="handleHeroWheel">
             <article class="blogs-lead" data-aos="fade-up" data-aos-offset="20" data-aos-delay="100">
               <div class="blogs-lead__sticky">
                 <router-link :to="`/blogs/${heroLead.slug}`" class="blogs-lead__image-link">
@@ -44,7 +44,7 @@
                   v-for="(post, index) in heroSidePosts"
                   :key="post.slug"
                   class="blogs-side__item"
-                  :class="{ 'blogs-side__item--hero': index === 0 }"
+                  :class="{ 'blogs-side__item--hero': index === activeHeroSideIndex }"
                   data-aos="fade-up"
                   data-aos-offset="20"
                   data-aos-delay="100"
@@ -150,8 +150,7 @@ const PAGE_INCREMENT = 9
 const FALLBACK_IMAGE = '/images/home/blog/new1.webp'
 const HERO_DESKTOP_BREAKPOINT = 1280
 const HERO_LOCK_TOP_OFFSET = 116
-const HERO_LOCK_RELEASE_MS = 700
-
+const HERO_LOCK_TOLERANCE = 4
 const route = useRoute()
 const router = useRouter()
 
@@ -165,6 +164,7 @@ const heroLockAnchorRef = ref(null)
 const heroSideScrollRef = ref(null)
 const isHeroDesktop = ref(false)
 const heroPinnedVisual = ref(false)
+const activeHeroSideIndex = ref(0)
 
 let heroResizeHandler = null
 let heroScrollHandler = null
@@ -212,13 +212,16 @@ const resetHeroSideScroll = () => {
   if (heroSideScrollRef.value) {
     heroSideScrollRef.value.scrollTop = 0
   }
+  activeHeroSideIndex.value = 0
 }
 
 const isHeroSectionPinned = () => {
   if (!heroLockMode.value || !heroSectionRef.value || !heroLockAnchorRef.value) return false
   const anchorRect = heroLockAnchorRef.value.getBoundingClientRect()
   const sectionRect = heroSectionRef.value.getBoundingClientRect()
-  return anchorRect.top <= HERO_LOCK_TOP_OFFSET && sectionRect.bottom >= window.innerHeight - 32
+  const sideHeight = heroSideScrollRef.value?.clientHeight || 0
+  const stickyBottom = HERO_LOCK_TOP_OFFSET + sideHeight
+  return anchorRect.top <= HERO_LOCK_TOP_OFFSET + HERO_LOCK_TOLERANCE && sectionRect.bottom >= stickyBottom
 }
 
 const alignViewportToHero = () => {
@@ -234,8 +237,37 @@ const syncHeroPinnedVisual = () => {
   heroPinnedVisual.value = isHeroSectionPinned()
 }
 
+const getHeroSideItems = () => {
+  if (!heroSideScrollRef.value) return []
+  return Array.from(heroSideScrollRef.value.querySelectorAll('.blogs-side__item'))
+}
+
+const syncActiveHeroSideIndex = (scrollTop) => {
+  const items = getHeroSideItems()
+  if (!items.length) {
+    activeHeroSideIndex.value = 0
+    return
+  }
+
+  let nextIndex = 0
+  let minDistance = Number.POSITIVE_INFINITY
+
+  items.forEach((item, index) => {
+    const distance = Math.abs(item.offsetTop - scrollTop)
+    if (distance < minDistance) {
+      minDistance = distance
+      nextIndex = index
+    }
+  })
+
+  activeHeroSideIndex.value = nextIndex
+}
+
 const handleHeroWheel = (event) => {
-  if (!heroLockMode.value || !isHeroSectionPinned() || !heroSideScrollRef.value) return
+  if (!heroLockMode.value || !heroSideScrollRef.value || !isHeroSectionPinned()) {
+    window.scrollBy({ top: event.deltaY, behavior: 'auto' })
+    return
+  }
 
   const direction = Math.sign(event.deltaY)
   if (direction === 0) return
@@ -244,12 +276,17 @@ const handleHeroWheel = (event) => {
   const maxScrollTop = Math.max(side.scrollHeight - side.clientHeight, 0)
   if (maxScrollTop <= 0) return
 
-  const nextScrollTop = Math.min(Math.max(side.scrollTop + event.deltaY, 0), maxScrollTop)
+  const cappedDelta = Math.max(Math.min(event.deltaY, 260), -260)
+  const nextScrollTop = Math.min(Math.max(side.scrollTop + cappedDelta, 0), maxScrollTop)
+
   if (nextScrollTop !== side.scrollTop) {
-    event.preventDefault()
     alignViewportToHero()
     side.scrollTop = nextScrollTop
+    syncActiveHeroSideIndex(nextScrollTop)
+    return
   }
+
+  window.scrollBy({ top: event.deltaY, behavior: 'auto' })
 }
 
 const syncRouteQuery = (filter) => {
@@ -314,7 +351,6 @@ onMounted(() => {
   heroScrollHandler = () => syncHeroPinnedVisual()
   window.addEventListener('resize', heroResizeHandler)
   window.addEventListener('scroll', heroScrollHandler, { passive: true })
-  window.addEventListener('wheel', handleHeroWheel, { passive: false })
 })
 
 onBeforeUnmount(() => {
@@ -324,7 +360,6 @@ onBeforeUnmount(() => {
   if (heroScrollHandler) {
     window.removeEventListener('scroll', heroScrollHandler)
   }
-  window.removeEventListener('wheel', handleHeroWheel)
 })
 </script>
 
@@ -395,7 +430,7 @@ onBeforeUnmount(() => {
   position: relative;
   overflow: visible;
   background: #ffffff;
-  padding: 1.5rem 0 2.5rem;
+  padding: 1.5rem 0 4.5rem;
 }
 
 .blogs-hero__backdrop {
@@ -522,11 +557,13 @@ onBeforeUnmount(() => {
 .blogs-side--scrollable {
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding-right: 10px;
+  padding-right: 0;
   scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .blogs-side--scrollable::-webkit-scrollbar {
+  display: none;
   width: 0;
   height: 0;
 }
@@ -703,6 +740,8 @@ onBeforeUnmount(() => {
   .blogs-lead__sticky,
   .blogs-side-shell {
     position: static;
+    height: auto;
+    overflow: visible;
   }
 
   .blogs-side {
@@ -738,7 +777,7 @@ onBeforeUnmount(() => {
   }
 
   .blogs-hero {
-    padding-bottom: 1.75rem;
+    padding-bottom: 2rem;
   }
 
   .blogs-hero__backdrop {

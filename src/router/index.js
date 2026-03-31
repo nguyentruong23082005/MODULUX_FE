@@ -29,6 +29,8 @@ const routes = [
     ],
   },
 
+
+
   {
     path: '/admin/login',
     name: 'Login',
@@ -43,10 +45,8 @@ const routes = [
       { path: '', name: 'Dashboard', meta: { title: 'Dashboard' }, component: () => import('@/views/admin/Dashboard.vue') },
       { path: 'projects', name: 'AdminProjects', meta: { title: 'Projects' }, component: () => import('@/views/admin/Projects.vue') },
       { path: 'blogs', name: 'AdminBlogs', meta: { title: 'Blogs' }, component: () => import('@/views/admin/Blogs.vue') },
-      { path: 'categories', name: 'AdminCategories', meta: { title: 'Categories' }, component: () => import('@/views/admin/Categories.vue') },
       { path: 'pages', name: 'AdminPages', meta: { title: 'Pages' }, component: () => import('@/views/admin/Pages.vue') },
-      { path: 'faqs', name: 'AdminFaqs', meta: { title: 'FAQs' }, component: () => import('@/views/admin/Faqs.vue') },
-      { path: 'videos', name: 'AdminVideos', meta: { title: 'Videos' }, component: () => import('@/views/admin/Videos.vue') },
+      { path: 'videos', name: 'AdminVideos', meta: { title: 'FQAs & Video' }, component: () => import('@/views/admin/Videos.vue') },
       { path: 'banners', name: 'AdminBanners', meta: { title: 'Hero Banners' }, component: () => import('@/views/admin/Banners.vue') },
       { path: 'features', name: 'AdminFeatures', meta: { title: 'Features' }, component: () => import('@/views/admin/Features.vue') },
       { path: 'partners', name: 'AdminPartners', meta: { title: 'Partners' }, component: () => import('@/views/admin/Partners.vue') },

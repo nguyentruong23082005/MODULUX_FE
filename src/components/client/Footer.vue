@@ -320,7 +320,7 @@ onUnmounted(() => {
 }
 
 .footer-shell__inner {
-  max-width: 1320px;
+  max-width: 1536px;
   margin: 0 auto;
   padding: 4.3rem 1rem 1.35rem;
 }

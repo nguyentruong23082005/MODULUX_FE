@@ -25,7 +25,7 @@
         </div>
 
         <h3 class="text-lg font-bold border-b pb-2 mb-4 mt-10">Why Partner With Us (Features)</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 gap-6">
           <!-- Feature 1 -->
           <div><label class="block text-sm font-semibold text-gray-700 mb-1">Feature 1 Title</label><input v-model="settingsMap.feature1_title" type="text" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-1 focus:ring-black outline-none"></div>
           <div><label class="block text-sm font-semibold text-gray-700 mb-1">Feature 1 Description</label><textarea v-model="settingsMap.feature1_desc" rows="2" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-1 focus:ring-black outline-none"></textarea></div>

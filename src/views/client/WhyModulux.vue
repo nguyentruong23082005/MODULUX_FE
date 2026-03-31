@@ -1,20 +1,5 @@
 <template>
   <div class="why-page">
-    <section class="why-hero">
-      <div class="why-hero__bg">
-        <img src="/images/home/nen.avif" alt="Why Modulux" loading="lazy" />
-      </div>
-      <div class="why-hero__overlay"></div>
-
-      <div class="container-custom why-hero__inner">
-        <h1 data-aos="fade-up" data-aos-offset="20" data-aos-delay="50">Why Modulux</h1>
-        <p data-aos="fade-up" data-aos-offset="20" data-aos-delay="80">
-          As one of the most modern and internationally standardized factories in Southeast Asia,
-          our entire production process is 100% vertically integrated in Vietnam.
-        </p>
-      </div>
-    </section>
-
     <section class="why-intro">
       <div class="container-custom why-intro__grid">
         <div
@@ -410,60 +395,6 @@ onMounted(fetchProjects)
   color: #1f2226;
 }
 
-.why-hero {
-  position: relative;
-  overflow: hidden;
-  min-height: 430px;
-  padding-top: 44px;
-  padding-bottom: 152px;
-  background: linear-gradient(122deg, #073640 0%, #0a6c72 58%, #075a62 100%);
-}
-
-.why-hero__bg,
-.why-hero__overlay {
-  position: absolute;
-  inset: 0;
-}
-
-.why-hero__bg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.2;
-  filter: saturate(0.65) contrast(0.95) brightness(0.68);
-}
-
-.why-hero__overlay {
-  background: linear-gradient(
-    90deg,
-    rgba(2, 44, 51, 0.84) 0%,
-    rgba(4, 78, 86, 0.62) 48%,
-    rgba(4, 86, 95, 0.34) 100%
-  );
-}
-
-.why-hero__inner {
-  position: relative;
-  z-index: 1;
-  color: #ffffff;
-}
-
-.why-hero__inner h1 {
-  margin: 0;
-  max-width: 760px;
-  font-size: clamp(2.05rem, 3.6vw, 3.25rem);
-  line-height: 1.05;
-  font-weight: 700;
-}
-
-.why-hero__inner p {
-  margin: 1.85rem 0 0;
-  max-width: 680px;
-  color: rgba(229, 236, 240, 0.94);
-  font-size: clamp(1rem, 1.34vw, 1.14rem);
-  line-height: 1.62;
-}
-
 :deep(.why-video-section-bottom) {
   position: relative;
   padding: 80px 0;
@@ -507,7 +438,7 @@ onMounted(fetchProjects)
 }
 
 .why-intro {
-  padding: 34px 0 12px;
+  padding: 12px 0 12px;
 }
 
 .why-intro__grid {
@@ -896,7 +827,7 @@ onMounted(fetchProjects)
 
 @media (min-width: 1024px) {
   .why-intro {
-    padding-top: 8px;
+    padding-top: 0;
   }
 
   .why-intro__grid {
@@ -960,21 +891,6 @@ onMounted(fetchProjects)
 @media (max-width: 767px) {
   .why-page {
     overflow: hidden;
-  }
-
-  .why-hero {
-    min-height: 378px;
-    padding-top: 26px;
-    padding-bottom: 108px;
-  }
-
-  .why-hero__inner h1 {
-    font-size: 2rem;
-  }
-
-  .why-hero__inner p {
-    margin-top: 1.1rem;
-    font-size: 0.97rem;
   }
 
   :deep(.why-video-section) {

@@ -1,20 +1,14 @@
 <template>
   <header :class="['header', { 'header--scrolled': isScrolled }]">
     <div class="header__inner">
-      <!-- Logo bên trái -->
-      <router-link to="/" class="header__logo">
+      <router-link to="/" class="header__logo" aria-label="Modulux Homes">
         <img src="/images/Logo_MDL.svg" alt="Modulux Homes" />
       </router-link>
 
-      <!-- Nav + Actions gom bên phải (giống reference) -->
       <div class="header__right">
         <nav class="header__nav">
           <template v-for="item in mainItems" :key="item.key">
-            <router-link
-              v-if="!item.children?.length"
-              class="nav-link"
-              :to="item.path"
-            >
+            <router-link v-if="!item.children?.length" class="nav-link" :to="item.path">
               {{ item.label }}
             </router-link>
 
@@ -25,6 +19,7 @@
                   <path d="m6 9 6 6 6-6" stroke-linecap="round" />
                 </svg>
               </button>
+
               <div class="nav-dropdown__panel">
                 <router-link
                   v-for="child in item.children"
@@ -40,7 +35,7 @@
         </nav>
 
         <div class="header__actions">
-          <span class="header__divider">|</span>
+          <span class="header__divider" aria-hidden="true"></span>
           <router-link :to="searchPath" class="header__search" aria-label="Search">
             <svg class="header__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <path d="m21 21-4.35-4.35" stroke-linecap="round" />
@@ -53,7 +48,6 @@
         </div>
       </div>
 
-      <!-- Mobile hamburger -->
       <button class="header__hamburger" type="button" @click="isOpen = !isOpen" aria-label="Open menu">
         <svg v-if="!isOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
@@ -64,7 +58,6 @@
       </button>
     </div>
 
-    <!-- Mobile menu -->
     <transition name="slide-fade">
       <div v-if="isOpen" class="mobile-menu">
         <template v-for="item in mobileItems" :key="`m-${item.key}`">
@@ -91,11 +84,7 @@
           </div>
         </template>
 
-        <router-link
-          :to="cta.path"
-          class="mobile-menu__cta"
-          @click="closeMobile"
-        >
+        <router-link :to="cta.path" class="mobile-menu__cta" @click="closeMobile">
           {{ cta.label }}
         </router-link>
       </div>
@@ -167,25 +156,33 @@ async function fetchMenu() {
     if (Array.isArray(data?.items) && data.items.length) {
       menuItems.value = data.items
     }
+
     if (data?.cta?.label && data?.cta?.path) {
       cta.value = {
         ...data.cta,
         path: normalizeCtaPath(data.cta.path, data.cta.label),
       }
     }
+
     if (data?.search?.path) {
       searchPath.value = data.search.path
     }
   } catch {
-    // Giữ fallback menu khi API chưa sẵn sàng
+    // Keep fallback navigation when the API is unavailable.
   }
 }
 
-watch(() => route.fullPath, () => { isOpen.value = false })
+watch(
+  () => route.fullPath,
+  () => {
+    isOpen.value = false
+  },
+)
 
 onMounted(() => {
   fetchMenu()
-  window.addEventListener('scroll', handleScroll)
+  handleScroll()
+  window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
 onUnmounted(() => {
@@ -194,16 +191,13 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* ========================================
-   HEADER — nền trắng, sticky top
-   ======================================== */
 .header {
   position: sticky;
   top: 0;
   z-index: 50;
   background: #ffffff;
-  border-bottom: 1px solid #f0f0f0;
-  transition: all 0.3s ease;
+  border-bottom: 1px solid #ececec;
+  transition: box-shadow 0.3s ease;
 }
 
 .header--scrolled {
@@ -214,79 +208,51 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1400px;
-  height: 84px;
+  max-width: 1536px;
+  height: 80px;
   margin: 0 auto;
-  padding: 0 1.25rem;
-  transition: height 0.3s ease;
+  padding: 0 0.5rem;
 }
 
-.header--scrolled .header__inner {
-  height: 84px; /* Giữ nguyên chiều cao giống mẫu */
-}
-
-@media (min-width: 768px) {
-  .header__inner { padding: 0 2rem; }
-}
-
-/* ---- Logo (bên trái) ---- */
 .header__logo {
+  display: inline-flex;
+  align-items: center;
   flex-shrink: 0;
 }
 
 .header__logo img {
-  height: 48px;
   width: auto;
-  transition: height 0.3s ease;
+  height: 56px;
 }
 
-.header--scrolled .header__logo img {
-  height: 48px;
-}
-
-@media (min-width: 768px) {
-  .header__logo img { height: 54px; }
-}
-
-/* ---- Right group: Nav + Actions gom phải ---- */
 .header__right {
   display: none;
   align-items: center;
 }
 
-@media (min-width: 1024px) {
-  .header__right { display: flex; }
-}
-
-/* ---- Nav ---- */
 .header__nav {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
-/* ---- Nav link ---- */
 .nav-link {
   position: relative;
   display: inline-flex;
   align-items: center;
-  font-size: 0.938rem;
-  font-weight: 500;
+  gap: 0.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: #111111;
   text-decoration: none;
   white-space: nowrap;
-  transition:
-    color 0.3s ease,
-    font-weight 0.3s ease;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
   font-family: inherit;
-}
-
-.header--scrolled .nav-link {
-  color: #111111;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.24s ease;
 }
 
 .nav-link:hover,
@@ -294,21 +260,14 @@ onUnmounted(() => {
 .router-link-active.nav-link,
 .nav-dropdown:hover > .nav-link,
 .nav-dropdown:focus-within > .nav-link {
-  color: #355845 !important;
-  font-weight: 700;
+  color: #355845;
   outline: none;
 }
 
 .nav-link__icon {
-  display: inline-block;
   width: 14px;
   height: 14px;
-  margin-left: 4px;
-  transition: transform 0.2s;
-}
-
-.nav-dropdown:hover .nav-link__icon {
-  transform: rotate(180deg);
+  transition: transform 0.2s ease;
 }
 
 .nav-dropdown {
@@ -324,6 +283,11 @@ onUnmounted(() => {
   height: 22px;
 }
 
+.nav-dropdown:hover .nav-link__icon,
+.nav-dropdown:focus-within .nav-link__icon {
+  transform: rotate(180deg);
+}
+
 .nav-dropdown__panel {
   position: absolute;
   left: 50%;
@@ -331,18 +295,18 @@ onUnmounted(() => {
   transform: translateX(-50%);
   min-width: 250px;
   padding: 10px 6px;
-  background: #fff;
+  background: #ffffff;
   border-radius: 12px;
   box-shadow:
     0 10px 40px rgba(0, 0, 0, 0.08),
     0 2px 8px rgba(0, 0, 0, 0.03);
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition:
     opacity 0.24s ease,
     transform 0.24s ease,
     visibility 0.24s ease;
-  pointer-events: none;
 }
 
 .nav-dropdown:hover .nav-dropdown__panel,
@@ -350,21 +314,20 @@ onUnmounted(() => {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
 }
 
 .nav-dropdown__item {
   display: block;
   padding: 10px 18px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #333;
-  text-decoration: none;
   border-radius: 8px;
+  color: #333333;
+  text-decoration: none;
+  font-size: 0.95rem;
+  line-height: 1.4rem;
+  font-weight: 500;
   transition:
-    color 0.2s ease,
     background-color 0.2s ease,
-    font-weight 0.2s ease;
+    color 0.2s ease;
 }
 
 .nav-dropdown__item:hover,
@@ -372,47 +335,40 @@ onUnmounted(() => {
 .nav-dropdown__item.router-link-active {
   background: #f2f6f3;
   color: #355845;
-  font-weight: 700;
   outline: none;
 }
 
-/* ---- Actions (divider | search | CTA) ---- */
 .header__actions {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-left: 2.5rem;
+  margin-left: 2rem;
 }
 
 .header__divider {
-  font-size: 1.2rem;
-  line-height: 1;
-  color: #e0e0e0;
-  user-select: none;
-}
-
-.header--scrolled .header__divider {
-  color: #e0e0e0;
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: #222222;
+  flex-shrink: 0;
 }
 
 .header__search {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
+  color: #111111;
   border-radius: 50%;
-  color: #111111;
-  transition: all 0.2s;
-}
-
-.header--scrolled .header__search {
-  color: #111111;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .header__search:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: #5E6F63;
+  color: #355845;
 }
 
 .header__search-icon {
@@ -420,47 +376,35 @@ onUnmounted(() => {
   height: 20px;
 }
 
-/* ---- CTA Button — nền đen ---- */
 .header__cta {
   display: inline-flex;
   align-items: center;
-  padding: 12px 28px;
-  font-size: 0.875rem;
-  font-weight: 600;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 16px;
+  background: #111111;
   color: #ffffff;
-  background: #111111;
   text-decoration: none;
-  transition: all 0.3s ease;
-  border-radius: 2px;
-}
-
-.header--scrolled .header__cta {
-  background: #111111;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  transition: background-color 0.24s ease;
 }
 
 .header__cta:hover {
   background: #333333;
 }
 
-.header--scrolled .header__cta:hover {
-  background: #333333;
-}
-
-/* ---- Hamburger (mobile) ---- */
 .header__hamburger {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  border: none;
-  background: none;
+  border: 0;
+  background: transparent;
   color: #111111;
   cursor: pointer;
-}
-
-.header--scrolled .header__hamburger {
-  color: #111111;
 }
 
 .header__hamburger svg {
@@ -468,29 +412,22 @@ onUnmounted(() => {
   height: 28px;
 }
 
-@media (min-width: 1024px) {
-  .header__hamburger { display: none; }
-}
-
-/* ========================================
-   MOBILE MENU
-   ======================================== */
 .mobile-menu {
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: #ffffff;
   padding: 12px 16px 32px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
 .mobile-menu__link {
   display: block;
   padding: 16px 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #222;
+  color: #222222;
   text-decoration: none;
   border-bottom: 1px solid #f5f5f5;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .mobile-menu__group {
@@ -499,10 +436,11 @@ onUnmounted(() => {
 }
 
 .mobile-menu__group-title {
+  margin: 0;
   padding: 4px 8px;
+  color: #888888;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #888;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -510,9 +448,9 @@ onUnmounted(() => {
 .mobile-menu__sublink {
   display: block;
   padding: 10px 8px 10px 20px;
-  font-size: 0.95rem;
-  color: #444;
+  color: #444444;
   text-decoration: none;
+  font-size: 0.95rem;
 }
 
 .mobile-menu__cta {
@@ -520,11 +458,26 @@ onUnmounted(() => {
   margin-top: 24px;
   padding: 16px;
   text-align: center;
+  background: #0a4834;
+  color: #ffffff;
+  text-decoration: none;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #fff;
-  background: #0a4834;
-  text-decoration: none;
 }
 
+@media (min-width: 768px) {
+  .header__logo img {
+    height: 72px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header__right {
+    display: flex;
+  }
+
+  .header__hamburger {
+    display: none;
+  }
+}
 </style>
