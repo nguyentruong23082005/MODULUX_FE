@@ -5,7 +5,6 @@
         <!-- Cột trái: Tiêu đề + CTA -->
         <div class="fp__header" data-aos="fade-right" data-aos-duration="1000">
           <div class="fp__header-content">
-            <span class="fp__subtitle">Our Projects</span>
             <h2 class="fp__title">Featured Projects</h2>
             <p class="fp__description">
               Explore our latest modular housing solutions, designed for sustainability, speed, and architectural excellence.
@@ -113,6 +112,7 @@ const smallCards = computed(() => {
 .fp {
   background: #fdfdfd;
   overflow: hidden;
+  padding-top: 3.5rem;
 }
 
 .fp__grid {
@@ -122,6 +122,10 @@ const smallCards = computed(() => {
 }
 
 @media (min-width: 1024px) {
+  .fp {
+    padding-top: 4.5rem;
+  }
+
   .fp__grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 4rem 2.5rem;
@@ -303,5 +307,11 @@ const smallCards = computed(() => {
 .fp__card-icon {
   width: 16px;
   height: 16px;
+}
+
+@media (max-width: 767px) {
+  .fp {
+    padding-top: 2.5rem;
+  }
 }
 </style>

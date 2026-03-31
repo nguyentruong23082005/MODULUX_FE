@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import publicApi from '@/services/publicApi';
+import { getProjectCardImage } from '@/utils/media';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import PartnersSection from '@/components/client/home/PartnersSection.vue';
@@ -28,7 +29,7 @@ const fetchData = async () => {
     projects.value = projectsRes.data.map(p => ({
       slug: p.slug,
       title: p.title,
-      cardImage: p.thumbnail_url || '/images/project-placeholder.jpg',
+      cardImage: getProjectCardImage(p),
       installTime: p.installation_time
     }));
   } catch (err) {

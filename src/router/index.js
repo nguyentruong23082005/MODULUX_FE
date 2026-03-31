@@ -5,7 +5,12 @@ const routes = [
     path: '/',
     component: () => import('@/layouts/client/WebLayout.vue'),
     children: [
-      { path: '', name: 'Home', component: () => import('@/views/client/Home.vue') },
+      {
+        path: '',
+        alias: '/home',
+        name: 'Home',
+        component: () => import('@/views/client/Home.vue'),
+      },
       { path: 'about', name: 'About', component: () => import('@/views/client/About.vue') },
       { path: 'contact', name: 'PublicContact', component: () => import('@/views/client/Contact.vue') },
       { path: 'enquire-now', name: 'EnquireNow', component: () => import('@/views/client/Contact.vue') },
@@ -61,11 +66,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    }
-
+  scrollBehavior(to, from) {
     if (to.path === from.path && to.path === '/blogs') {
       return false
     }
@@ -74,10 +75,15 @@ const router = createRouter({
   },
 })
 
-router.beforeEach((to, from, next) => {
+if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual'
+}
+
+router.beforeEach((to) => {
   const token = localStorage.getItem('cms_token')
-  if (to.meta.requiresAuth && !token) next('/admin/login')
-  else next()
+  if (to.meta.requiresAuth && !token) {
+    return '/admin/login'
+  }
 })
 
 export default router

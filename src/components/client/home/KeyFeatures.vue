@@ -1,53 +1,60 @@
 <template>
-  <section class="kf section-padding" aria-labelledby="key-features-title">
-    <div class="container-custom">
-      <div class="kf__layout">
-        <aside class="kf__intro" data-aos="fade-right" data-aos-duration="800">
-          <h2 id="key-features-title" class="kf__title">Key Features</h2>
-          <p class="kf__desc">
-            As one of the most modern and internationally standardized factories in Southeast Asia,
-            our entire production process is 100% vertically integrated in Vietnam.
-          </p>
+  <section class="kf" aria-labelledby="key-features-title">
+    <div class="kf__shell">
+      <div class="kf__grid">
+        <aside class="kf__intro" data-aos="fade-up" data-aos-duration="800">
+          <div class="kf__intro-copy">
+            <h2 id="key-features-title" class="kf__title">Key Features</h2>
+            <p class="kf__intro-desc">
+              As one of the most modern and internationally standardized factories in Southeast Asia,
+              our entire production process is 100% vertically integrated in Vietnam
+            </p>
+          </div>
 
           <router-link to="/why-modulux" class="kf__button" aria-label="Why Modulux">
             Why Modulux
           </router-link>
         </aside>
 
-        <div class="kf__content">
-          <div class="kf__cards">
-            <article
-              v-for="(feature, idx) in displayFeatures"
-              :key="feature.id"
-              class="kf__card"
-              data-aos="fade-up"
-              :data-aos-delay="idx * 90"
-              data-aos-duration="800"
-            >
-              <div class="kf__card-head">
-                <div class="kf__card-title-wrap">
-                  <img :src="feature.icon" :alt="`${feature.title} icon`" class="kf__card-icon" />
-                  <h3 class="kf__card-title">{{ feature.title }}</h3>
-                </div>
-                <span class="kf__card-line" aria-hidden="true"></span>
-              </div>
-
-              <p class="kf__card-desc">{{ feature.desc }}</p>
-
-              <div class="kf__image-wrap">
-                <img :src="feature.image" :alt="feature.title" class="kf__image" loading="lazy" />
-              </div>
-            </article>
+        <article
+          v-for="(feature, idx) in displayFeatures"
+          :key="feature.id"
+          class="kf__card"
+          data-aos="fade-up"
+          :data-aos-delay="80 + idx * 70"
+          data-aos-duration="800"
+        >
+          <div class="kf__card-head">
+            <span class="kf__card-icon-wrap">
+              <img :src="feature.icon" :alt="`${feature.title} icon`" class="kf__card-icon" loading="lazy" />
+            </span>
+            <h3 class="kf__card-title">{{ feature.title }}</h3>
+            <span class="kf__card-line" aria-hidden="true"></span>
           </div>
 
-          <div class="kf__footer" data-aos="fade-left" data-aos-delay="160" data-aos-duration="800">
-            <router-link to="/why-modulux" class="kf__more-link">
-              <span>Learn more why modulux</span>
-              <svg class="kf__more-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </router-link>
+          <p class="kf__card-desc">
+            <template v-if="feature.descLines?.length">
+              <template v-for="(line, lineIdx) in feature.descLines" :key="`${feature.id}-${lineIdx}`">
+                {{ line }}<br v-if="lineIdx < feature.descLines.length - 1" />
+              </template>
+            </template>
+            <template v-else>
+              {{ feature.desc }}
+            </template>
+          </p>
+
+          <div class="kf__image-wrap">
+            <img :src="feature.image" :alt="feature.title" class="kf__image" loading="lazy" />
           </div>
+        </article>
+
+        <div class="kf__cta" data-aos="fade-right" data-aos-delay="360" data-aos-duration="800">
+          <router-link to="/why-modulux" class="kf__more-link">
+            <span>Learn more why modulux</span>
+            <svg class="kf__more-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </router-link>
         </div>
       </div>
     </div>
@@ -68,25 +75,41 @@ const fallbackFeatures = [
   {
     title: 'Quick Installation',
     icon: '/images/Quick_Installation.svg',
-    desc: 'Featuring two flexible installation methods (Module/Panel) tailored to each project scale.',
+    desc: 'Featuring two flexible installation methods (Module/Panel) tailored to',
+    descLines: [
+      'Featuring two flexible installation',
+      'methods (Module/Panel) tailored to',
+    ],
     image: '/images/home/Key Features/key-feature-quick-installation.png',
   },
   {
     title: 'Technology',
     icon: '/images/Technology.svg',
-    desc: 'Modulux Homes employs the most advanced construction technologies to streamline delivery.',
+    desc: 'Modulux Homes employs the most advanced construction technologies to',
+    descLines: [
+      'Modulux Homes employs the most',
+      'advanced construction technologies to',
+    ],
     image: '/images/home/Key Features/key-feature-technology.png',
   },
   {
     title: 'Cost-Efficient Optimization',
     icon: '/images/Cost-efficient.svg',
-    desc: 'Benefit from significant cost reductions due to mass production and minimized on-site work.',
+    desc: 'Benefit from significant cost reductions due to mass production and minimized',
+    descLines: [
+      'Benefit from significant cost reductions',
+      'due to mass production and minimized',
+    ],
     image: '/images/home/Key Features/key-feature-cost-efficient-optimization.png',
   },
   {
     title: 'Quality',
     icon: '/images/Quality.svg',
-    desc: 'Modulux Homes delivers high-quality prefabricated homes that undergo strict factory-controlled standards.',
+    desc: 'Modulux Homes delivers high-quality prefabricated homes that undergo',
+    descLines: [
+      'Modulux Homes delivers high-quality',
+      'prefabricated homes that undergo',
+    ],
     image: '/images/home/Key Features/key-feature-quality.png',
   },
 ]
@@ -130,6 +153,7 @@ const displayFeatures = computed(() => {
       title: apiItem?.title || fallbackItem.title,
       icon: apiItem?.icon || fallbackItem.icon,
       desc: apiItem?.desc || fallbackItem.desc,
+      descLines: apiItem?.desc ? null : fallbackItem.descLines,
       image: apiItem?.image || fallbackItem.image,
     }
   })
@@ -139,158 +163,166 @@ const displayFeatures = computed(() => {
 <style scoped>
 .kf {
   background: #ffffff;
+  padding: 3.25rem 0 4.5rem;
 }
 
-.kf__layout {
+.kf__shell {
+  width: min(calc(100% - 2rem), 94rem);
+  margin: 0 auto;
+}
+
+.kf__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .kf__intro {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   align-items: flex-start;
+}
+
+.kf__intro-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
 
 .kf__title {
   margin: 0;
-  color: #111111;
-  font-size: clamp(2rem, 3vw, 2.45rem);
+  color: #000000;
+  font-family: 'Geoform-Bold', 'Montserrat', var(--font-display);
+  font-size: clamp(2rem, 1.65rem + 0.95vw, 2.25rem);
   font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.04em;
+  line-height: 1.11;
+  letter-spacing: -0.03em;
 }
 
-.kf__desc {
-  margin: 0.9rem 0 0;
-  max-width: 210px;
-  color: #6b6f73;
-  font-size: 0.74rem;
-  line-height: 1.7;
+.kf__intro-desc {
+  margin: 0;
+  color: #222222;
+  font-family: 'Quicksand-Medium', 'Quicksand', var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .kf__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 7rem;
-  min-width: 78px;
-  min-height: 22px;
-  padding: 0.18rem 0.5rem;
-  background: #050505;
+  width: fit-content;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  background: #000000;
   color: #ffffff;
   text-decoration: none;
-  font-size: 0.54rem;
-  font-weight: 700;
-  line-height: 1;
+  font-family: 'Geoform-Medium', 'Quicksand', var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
   transition:
-    transform 0.25s ease,
     background-color 0.25s ease,
-    opacity 0.25s ease;
+    transform 0.25s ease;
 }
 
 .kf__button:hover {
-  background: #0d0d0d;
+  background: #1b1b1b;
   transform: translateY(-1px);
-  opacity: 0.95;
-}
-
-.kf__content {
-  display: flex;
-  flex-direction: column;
-}
-
-.kf__cards {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.55rem 1.15rem;
 }
 
 .kf__card {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  overflow: hidden;
 }
 
 .kf__card-head {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.25rem;
 }
 
-.kf__card-title-wrap {
+.kf__card-icon-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 0.28rem;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  min-width: 1.5rem;
+  overflow: hidden;
+  background: #ffffff;
   flex-shrink: 0;
 }
 
 .kf__card-icon {
-  width: 11px;
-  height: 11px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  opacity: 0.95;
 }
 
 .kf__card-title {
   margin: 0;
-  color: #202020;
-  font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  color: #1a1a1a;
+  font-family: 'Geoform-Medium', 'Montserrat', var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .kf__card-line {
-  display: block;
-  width: 100%;
+  flex: 1;
   height: 1px;
-  background: #bfc3c6;
-  transform: translateY(1px);
+  background: #afafaf;
 }
 
 .kf__card-desc {
-  margin: 0.42rem 0 0.7rem;
-  max-width: 278px;
-  min-height: 2.1rem;
-  color: #7a8086;
-  font-size: 0.61rem;
-  line-height: 1.45;
-}
-
-.kf__image-wrap {
-  overflow: hidden;
-  border-radius: 4px;
-  background: #f1f1f1;
-  aspect-ratio: 1.12 / 1;
+  margin: 0;
+  min-height: 2.5rem;
+  color: #6b7280;
+  font-family: 'Quicksand-Medium', 'Quicksand', var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 .kf__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s ease;
+  object-position: center;
 }
 
-.kf__card:hover .kf__image {
-  transform: scale(1.025);
+.kf__image-wrap {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background: #f1f1f1;
+  height: 18.5rem;
 }
 
-.kf__footer {
+.kf__cta {
   display: flex;
   justify-content: flex-start;
-  padding-top: 0.65rem;
+  align-items: flex-start;
 }
 
 .kf__more-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.42rem;
-  color: #245c49;
+  gap: 0.5rem;
+  width: 100%;
+  color: #0a4834;
   text-decoration: none;
-  font-size: 0.88rem;
-  font-weight: 500;
-  line-height: 1.2;
+  font-family: 'Quicksand-Bold', 'Quicksand', var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
   transition:
     color 0.25s ease,
     transform 0.25s ease;
@@ -302,87 +334,105 @@ const displayFeatures = computed(() => {
 }
 
 .kf__more-icon {
-  width: 13px;
-  height: 13px;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
-  .kf__cards {
+  .kf {
+    padding-top: 4.75rem;
+    padding-bottom: 5rem;
+  }
+
+  .kf__shell {
+    width: min(calc(100% - 4rem), 94rem);
+  }
+
+  .kf__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 1.5rem;
+  }
+
+  .kf__cta {
+    grid-column: 1 / -1;
   }
 }
 
 @media (min-width: 1024px) {
-  .kf__layout {
-    grid-template-columns: minmax(220px, 236px) minmax(0, 1fr);
-    gap: 1.15rem;
-    align-items: start;
+  .kf {
+    padding-top: 5.5rem;
   }
 
-  .kf__footer {
-    justify-content: flex-end;
-    padding-top: 0.2rem;
-    padding-right: 7.2rem;
+  .kf__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem;
+  }
+
+  .kf__button {
+    margin-bottom: 6rem;
+  }
+
+  .kf__intro {
+    min-height: 32.4375rem;
+    justify-content: space-between;
+  }
+
+  .kf__cta {
+    grid-column: 3;
+    grid-row: 2;
+    padding-top: 0;
+  }
+
+  .kf__more-link {
+    padding-top: 2.5rem;
+  }
+
+  .kf__image-wrap {
+    height: 24rem;
   }
 }
 
 @media (max-width: 1023px) {
-  .kf__intro {
-    max-width: 100%;
-  }
-
-  .kf__desc {
-    max-width: 100%;
-    font-size: 0.86rem;
-  }
-
   .kf__button {
-    margin-top: 1.6rem;
-    min-width: 118px;
-    min-height: 42px;
-    padding: 0.75rem 1rem;
-    font-size: 0.78rem;
-  }
-
-  .kf__card-title {
-    font-size: 1rem;
+    margin-top: 0.5rem;
   }
 
   .kf__card-desc {
-    font-size: 0.76rem;
     min-height: auto;
-  }
-
-  .kf__more-link {
-    font-size: 0.98rem;
-  }
-
-  .kf__more-icon {
-    width: 16px;
-    height: 16px;
   }
 }
 
 @media (max-width: 767px) {
-  .kf__layout {
-    gap: 1.5rem;
+  .kf {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
   }
 
-  .kf__cards {
+  .kf__shell {
+    width: calc(100% - 2rem);
+  }
+
+  .kf__grid {
     gap: 1.25rem;
   }
 
+  .kf__title {
+    font-size: 2rem;
+  }
+
   .kf__image-wrap {
-    aspect-ratio: 1.08 / 1;
+    height: 16rem;
   }
 
-  .kf__footer {
-    justify-content: flex-start;
-    padding-top: 0.1rem;
+  .kf__intro-desc {
+    font-size: 0.95rem;
   }
 
+  .kf__card-title,
   .kf__more-link {
-    font-size: 0.94rem;
+    font-size: 1.05rem;
+    line-height: 1.35;
   }
 }
 </style>

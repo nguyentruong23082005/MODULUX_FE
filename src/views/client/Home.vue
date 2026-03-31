@@ -27,8 +27,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import publicApi from '@/services/publicApi'
+import { getProjectCardImage } from '@/utils/media'
 import { getBlogs } from '@/services/blogApi'
 
 import HeroSection from '@/components/client/home/HeroSection.vue'
@@ -43,33 +44,13 @@ import NewsSection from '@/components/client/home/NewsSection.vue'
 // ═══════════════════════════════════════════
 // 1. Hero Banner — lấy từ API CMS
 // ═══════════════════════════════════════════
-const DEFAULT_HERO = {
-  title: 'HIGH-PERFORMANCE\nMODULAR HOMES',
-  description: 'We deliver premium modular homes with precision engineering, faster timelines, and scalable solutions for global markets.',
-  image_url: 'https://imagedelivery.net/KHaby7r0MOA4Gt7v7Yk1jg/a52f1a20-b2bb-4d4d-a002-ea57f0b77500/2K',
+const heroBanner = ref({
+  eyebrow: 'HIGH-PERFORMANCE MODULAR HOMES FOR',
+  title: 'ARCHITECTS, DEVELOPERS, PARTNERS AND INVESTORS.',
+  image_url: '/images/home/banner/banner1.webp',
   cta_text: 'Learn more',
   cta_link: '/about',
-}
-
-const heroBanner = ref({ ...DEFAULT_HERO })
-
-const fetchHeroBanner = async () => {
-  try {
-    const res = await publicApi.get('/api/v1/banners/')
-    if (res.data && res.data.length > 0) {
-      const b = res.data[0]
-      heroBanner.value = {
-        title: b.title || DEFAULT_HERO.title,
-        description: b.subtitle || DEFAULT_HERO.description,
-        image_url: b.media_url || DEFAULT_HERO.image_url,
-        cta_text: b.button_text || DEFAULT_HERO.cta_text,
-        cta_link: b.button_link || DEFAULT_HERO.cta_link,
-      }
-    }
-  } catch (err) {
-    console.warn('Hero banner API error:', err)
-  }
-}
+})
 
 // ═══════════════════════════════════════════
 // 3. Feature Projects — Lấy từ API
@@ -85,7 +66,7 @@ const fetchFeaturedProjects = async () => {
       featuredProjects.value = res.data.map(p => ({
         slug: p.slug,
         title: p.title,
-        cardImage: p.thumbnail_url || '/images/project-placeholder.jpg',
+        cardImage: getProjectCardImage(p),
         installTime: p.installation_time
       }))
     } else {
@@ -108,23 +89,15 @@ const fetchKeyFeatures = async () => {
     if (res.data && res.data.length > 0) {
       keyFeatures.value = res.data.map(f => ({
         title: f.title,
-        icon: f.icon_url || '/images/Technology.svg',
-        desc: f.description,
-        image: '/images/Hawaii-Garden-Studio-Overview-1-1.png' // Fallback image if not in DB
+        icon: f.icon_url || undefined,
+        desc: f.description || '',
       }))
     } else {
-      // Fallback data
-      keyFeatures.value = [
-        {
-          title: 'Quick Installation',
-          icon: '/images/Quick_Installation.svg',
-          desc: 'Featuring two flexible installation methods tailored to each project scale.',
-          image: '/images/Hawaii-Garden-Studio-Overview-1-1.png',
-        }
-      ]
+      keyFeatures.value = []
     }
   } catch (err) {
     console.warn('Key features API error:', err)
+    keyFeatures.value = []
   }
 }
 
@@ -155,6 +128,57 @@ const fetchPartners = async () => {
 // ═══════════════════════════════════════════
 const blogPosts = ref([])
 
+const fallbackBlogPosts = [
+  {
+    slug: 'modular-industrialization-supply-chain-transparency',
+    title: 'Modular Industrialization & Supply Chain Transparency: A New Step Forward for Vietnam',
+    excerpt: '',
+    image: '/images/1757315843731-covermdl.jpeg',
+    category: 'PROJECTS',
+    date: '',
+  },
+  {
+    slug: 'application-of-light-gauge-steel-for-multi-story-houses',
+    title: 'Application of light gauge steel for multi-story houses.',
+    excerpt: '',
+    image: '/images/1757389588623-1212.jpg',
+    category: 'BUILDING',
+    date: '',
+  },
+  {
+    slug: 'light-gauge-steel-guide-modern-construction-solutions',
+    title: 'Light Gauge Steel: The Ultimate Guide to Modern Construction Solutions',
+    excerpt: '',
+    image: '/images/home/our-technology/LGSModular.webp',
+    category: 'BUILDING',
+    date: '',
+  },
+  {
+    slug: 'tranduc-at-sydney-build-expo-2025',
+    title: 'TranDuc at Sydney Build Expo 2025: Vietnamese Pioneer Showcases Green Building Solutions',
+    excerpt: '',
+    image: '/images/home/blog/new1.webp',
+    category: 'FEATURED',
+    date: '',
+  },
+  {
+    slug: 'powering-modulux-homes-modern-prefabricated-home-solution',
+    title: 'Powering Modulux Homes Modern Prefabricated Home Solution',
+    excerpt: '',
+    image: '/images/home/Key Features/why-modulux/2K.avif',
+    category: 'DESIGN INSPIRATION',
+    date: '',
+  },
+  {
+    slug: 'modulux-homes-comprehensive-solution-for-developers-and-general-contractors',
+    title: 'Modulux Homes The Comprehensive Solution for Developers and General Contractors to Accelerate Progress, Optimize Costs, and Control Quality',
+    excerpt: '',
+    image: '/images/home/our-technology/Block1.png',
+    category: 'PROJECTS',
+    date: '',
+  },
+]
+
 const fetchBlogPosts = async () => {
   try {
     const data = await getBlogs({ page: 1, page_size: 6 })
@@ -168,11 +192,11 @@ const fetchBlogPosts = async () => {
         date: post.updated_at || post.created_at,
       }))
     } else {
-      blogPosts.value = []
+      blogPosts.value = [...fallbackBlogPosts]
     }
   } catch (err) {
     console.warn('Blogs API error:', err)
-    blogPosts.value = []
+    blogPosts.value = [...fallbackBlogPosts]
   }
 }
 
@@ -180,7 +204,6 @@ const fetchBlogPosts = async () => {
 // Lifecycle
 // ═══════════════════════════════════════════
 onMounted(() => {
-  fetchHeroBanner()
   fetchFeaturedProjects()
   fetchKeyFeatures()
   fetchPartners()

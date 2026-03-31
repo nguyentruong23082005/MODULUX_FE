@@ -222,6 +222,7 @@
 import { computed, onMounted, ref } from 'vue'
 import FactoryVideo from '@/components/client/home/FactoryVideo.vue'
 import publicApi from '@/services/publicApi'
+import { resolveMediaUrl, getProjectCardImage } from '@/utils/media'
 
 const whyImageBase = '/images/home/Key%20Features/why-modulux'
 
@@ -372,7 +373,7 @@ const fetchProjects = async () => {
       .map((item, idx) => ({
         slug: item.slug,
         title: item.title,
-        image: item.thumbnail_url || fallbackProjects[idx % fallbackProjects.length].image,
+        image: getProjectCardImage(item, fallbackProjects[idx % fallbackProjects.length].image),
         summary:
           item.summary ||
           'Explore this modular project for practical design ideas and proven build performance.',

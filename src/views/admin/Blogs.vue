@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="space-y-8">
     <section class="grid gap-5 lg:grid-cols-[1.6fr_1fr]">
       <div class="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.05)] lg:p-8">
@@ -33,12 +33,34 @@
           </button>
         </div>
 
+        <div class="mt-6 border-t border-slate-200 pt-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Import from URL</p>
+          <div class="mt-3 flex flex-col gap-3 sm:flex-row">
+            <input
+              v-model="urlInput"
+              type="url"
+              placeholder="https://example.com/blog-post"
+              class="flex-1 rounded-full border border-slate-300 bg-white px-5 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+              :disabled="syncing || importing || importingUrl"
+              @keydown.enter="handleImportUrl"
+            />
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-full bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50"
+              :disabled="!urlInput?.trim() || syncing || importing || importingUrl"
+              @click="handleImportUrl"
+            >
+              {{ importingUrl ? 'Importing...' : 'Import URL' }}
+            </button>
+          </div>
+        </div>
+
         <p v-if="actionMessage" class="mt-4 text-sm" :class="actionError ? 'text-rose-600' : 'text-emerald-700'">
           {{ actionMessage }}
         </p>
       </div>
 
-      <div class="grid gap-4 sm:grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <article class="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.04)]">
           <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Latest Run</p>
           <p class="mt-3 text-3xl font-semibold text-slate-950">{{ latestSummary.total }}</p>
@@ -142,9 +164,27 @@
                 Source: {{ blog.source_type }}
               </p>
             </div>
-            <div class="mt-4 flex flex-wrap gap-3 text-xs text-slate-500">
+            <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-500">
               <span class="rounded-full bg-slate-100 px-3 py-1">Slug: {{ blog.slug }}</span>
               <span class="rounded-full bg-slate-100 px-3 py-1">Last synced: {{ formatDateTime(blog.last_synced_at) }}</span>
+
+              <div class="ml-auto flex gap-2">
+                <button
+                  type="button"
+                  class="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
+                  @click="openDetail(blog)"
+                >
+                  View Detail
+                </button>
+                <button
+                  type="button"
+                  class="rounded-full border border-rose-300 bg-rose-50 px-4 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-100"
+                  :disabled="Boolean(deleting[blog.id])"
+                  @click="confirmDelete(blog)"
+                >
+                  {{ deleting[blog.id] ? 'Deleting...' : 'Delete' }}
+                </button>
+              </div>
             </div>
           </article>
         </div>
@@ -211,12 +251,114 @@
         </div>
       </div>
     </section>
+
+    <!-- Blog Detail Modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="detailModal.visible" class="fixed inset-0 z-[999] flex items-start justify-center overflow-y-auto bg-black/40 px-4 py-10 backdrop-blur-sm" @mousedown.self="closeDetail">
+          <div class="relative w-full max-w-3xl rounded-[32px] border border-slate-200 bg-white shadow-2xl">
+            <div class="sticky top-0 z-10 flex items-center justify-between rounded-t-[32px] border-b border-slate-200 bg-white/90 px-8 py-5 backdrop-blur-sm">
+              <div class="min-w-0 flex-1 pr-4">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Blog Detail</p>
+                <h3 class="mt-1 truncate text-lg font-semibold text-slate-950">{{ detailModal.blog?.title }}</h3>
+              </div>
+              <button
+                type="button"
+                class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                @click="closeDetail"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div v-if="detailModal.loading" class="space-y-3 p-8">
+              <div v-for="n in 6" :key="n" class="h-4 animate-pulse rounded-full bg-slate-100" :class="n % 3 === 0 ? 'w-2/3' : 'w-full'"></div>
+            </div>
+
+            <div v-else-if="detailModal.blog" class="p-8">
+              <div class="mb-6 flex flex-wrap gap-3 text-xs">
+                <span class="rounded-full bg-emerald-50 px-3 py-1 font-semibold uppercase tracking-[0.18em] text-emerald-700">{{ detailModal.blog.type }}</span>
+                <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-600">Slug: {{ detailModal.blog.slug }}</span>
+                <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-600">Created: {{ formatDate(detailModal.blog.created_at) }}</span>
+                <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-600">Updated: {{ formatDate(detailModal.blog.updated_at) }}</span>
+              </div>
+
+              <a
+                v-if="detailModal.blog.source_url"
+                :href="detailModal.blog.source_url"
+                target="_blank"
+                rel="noreferrer"
+                class="mb-6 inline-flex max-w-full truncate text-sm font-medium text-emerald-700 underline underline-offset-2 transition hover:text-emerald-800"
+              >
+                {{ detailModal.blog.source_url }}
+              </a>
+
+              <div class="prose prose-slate max-w-none rounded-2xl border border-slate-100 bg-slate-50/50 p-6" v-html="detailModal.blog.content"></div>
+            </div>
+
+            <div class="flex items-center justify-between rounded-b-[32px] border-t border-slate-200 bg-slate-50/50 px-8 py-4">
+              <button
+                type="button"
+                class="rounded-full border border-rose-300 bg-rose-50 px-5 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-100"
+                @click="confirmDelete(detailModal.blog); closeDetail()"
+              >
+                Delete this blog
+              </button>
+              <button
+                type="button"
+                class="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+                @click="closeDetail"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
+    <!-- Delete Confirm Modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="deleteConfirm.visible" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm" @mousedown.self="cancelDelete">
+          <div class="w-full max-w-md rounded-[28px] border border-slate-200 bg-white p-8 shadow-2xl">
+            <div class="flex items-center gap-4">
+              <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-rose-100 text-2xl">🗑️</div>
+              <div>
+                <h4 class="text-lg font-semibold text-slate-950">Delete blog?</h4>
+                <p class="mt-1 text-sm text-slate-500">This action cannot be undone.</p>
+              </div>
+            </div>
+            <p class="mt-4 rounded-2xl bg-slate-50 p-4 text-sm font-medium text-slate-700">
+              {{ deleteConfirm.blog?.title }}
+            </p>
+            <div class="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                class="rounded-full border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+                @click="cancelDelete"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="rounded-full bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-700 disabled:opacity-50"
+                :disabled="deleteConfirm.loading"
+                @click="executeDelete"
+              >
+                {{ deleteConfirm.loading ? 'Deleting...' : 'Yes, delete' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { getBlogs, getBlogSyncLogs, importBlogExcel, triggerBlogSync, updateBlogType } from '@/services/blogApi'
+import { computed, onMounted, reactive, ref } from 'vue'
+import { deleteBlog, getAdminBlogDetail, getBlogs, getBlogSyncLogs, importBlogExcel, importBlogUrl, triggerBlogSync, updateBlogType } from '@/services/blogApi'
 
 const BLOG_TYPES = Object.freeze(['DESIGN INSPIRATION', 'FEATURED', 'BUILDING', 'PROJECTS'])
 
@@ -225,6 +367,8 @@ const syncLogs = ref([])
 const selectedFile = ref(null)
 const syncing = ref(false)
 const importing = ref(false)
+const importingUrl = ref(false)
+const urlInput = ref('')
 const blogsLoading = ref(true)
 const logsLoading = ref(true)
 const actionMessage = ref('')
@@ -233,6 +377,10 @@ const currentPage = ref(1)
 const pagination = ref({ page: 1, page_size: 8, total: 0, total_pages: 0 })
 const typeDrafts = ref({})
 const typeSaving = ref({})
+const deleting = ref({})
+
+const detailModal = reactive({ visible: false, loading: false, blog: null })
+const deleteConfirm = reactive({ visible: false, loading: false, blog: null })
 
 const latestLog = computed(() => syncLogs.value[0] || null)
 const latestSummary = computed(() => latestLog.value || { total: 0, inserted: 0, updated: 0, skipped: 0 })
@@ -385,6 +533,87 @@ const handleImport = async () => {
   }
 }
 
+const handleImportUrl = async () => {
+  const url = urlInput.value?.trim()
+  if (!url) return
+
+  importingUrl.value = true
+  actionMessage.value = ''
+  actionError.value = false
+
+  try {
+    const summary = await importBlogUrl(url)
+    actionMessage.value = `URL import completed. Inserted ${summary.inserted}, updated ${summary.updated}, skipped ${summary.skipped}.`
+    actionError.value = false
+    urlInput.value = ''
+    await Promise.all([fetchLogs(), fetchBlogs(currentPage.value)])
+  } catch (err) {
+    actionMessage.value = err.response?.data?.detail || 'Failed to import from URL.'
+    actionError.value = true
+  } finally {
+    importingUrl.value = false
+  }
+}
+
+// ── Blog Detail Modal ──
+const openDetail = async (blog) => {
+  detailModal.visible = true
+  detailModal.loading = true
+  detailModal.blog = null
+
+  try {
+    detailModal.blog = await getAdminBlogDetail(blog.id)
+  } catch (err) {
+    detailModal.blog = null
+    actionMessage.value = err.response?.data?.detail || 'Failed to load blog detail.'
+    actionError.value = true
+    detailModal.visible = false
+  } finally {
+    detailModal.loading = false
+  }
+}
+
+const closeDetail = () => {
+  detailModal.visible = false
+  detailModal.blog = null
+}
+
+// ── Delete Blog ──
+const confirmDelete = (blog) => {
+  if (!blog) return
+  deleteConfirm.blog = blog
+  deleteConfirm.visible = true
+  deleteConfirm.loading = false
+}
+
+const cancelDelete = () => {
+  deleteConfirm.visible = false
+  deleteConfirm.blog = null
+}
+
+const executeDelete = async () => {
+  const blog = deleteConfirm.blog
+  if (!blog) return
+
+  deleteConfirm.loading = true
+  deleting.value = { ...deleting.value, [blog.id]: true }
+
+  try {
+    await deleteBlog(blog.id)
+    actionMessage.value = `Deleted "${blog.title}" successfully.`
+    actionError.value = false
+    deleteConfirm.visible = false
+    deleteConfirm.blog = null
+    await fetchBlogs(currentPage.value)
+  } catch (err) {
+    actionMessage.value = err.response?.data?.detail || 'Failed to delete blog.'
+    actionError.value = true
+  } finally {
+    deleteConfirm.loading = false
+    deleting.value = { ...deleting.value, [blog.id]: false }
+  }
+}
+
 const formatDate = (value) => {
   if (!value) return 'Unknown'
   return new Intl.DateTimeFormat('en-US', {
@@ -409,3 +638,14 @@ onMounted(async () => {
   await Promise.all([fetchBlogs(1), fetchLogs()])
 })
 </script>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.2s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+</style>

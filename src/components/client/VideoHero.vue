@@ -142,6 +142,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import publicApi from '@/services/publicApi'
+import { resolveMediaUrl } from '@/utils/media'
 
 const props = defineProps({
   heading: {
@@ -200,20 +201,25 @@ const thumbStripRef = ref(null)
 const canScrollLeft = ref(false)
 const canScrollRight = ref(false)
 
-const normalizeVideo = (video, index = 0) => ({
-  id: video.id ?? index + 1,
-  title: video.title || `Modulux Video ${index + 1}`,
-  videoUrl: video.videoUrl || video.video_url || '',
-  thumbnailUrl: video.thumbnailUrl || video.thumbnail_url || '',
-  posterUrl: video.posterUrl || video.poster_url || video.thumbnailUrl || video.thumbnail_url || fallbackPoster,
-  thumbnailLabel:
-    video.thumbnailLabel ||
-    video.thumbnail_label ||
-    video.title ||
-    `Video ${index + 1}`,
-  displayOrder: video.displayOrder || video.display_order || index,
-  isActive: video.isActive ?? video.is_active ?? true,
-})
+const normalizeVideo = (video, index = 0) => {
+  const rawThumbnail = video.thumbnailUrl || video.thumbnail_url || ''
+  const rawPoster = video.posterUrl || video.poster_url || ''
+
+  return {
+    id: video.id ?? index + 1,
+    title: video.title || `Modulux Video ${index + 1}`,
+    videoUrl: video.videoUrl || video.video_url || '',
+    thumbnailUrl: resolveMediaUrl(rawThumbnail),
+    posterUrl: resolveMediaUrl(rawPoster || rawThumbnail) || fallbackPoster,
+    thumbnailLabel:
+      video.thumbnailLabel ||
+      video.thumbnail_label ||
+      video.title ||
+      `Video ${index + 1}`,
+    displayOrder: video.displayOrder || video.display_order || index,
+    isActive: video.isActive ?? video.is_active ?? true,
+  }
+}
 
 const normalizedVideos = computed(() => {
   const source = videos.value.length ? videos.value : props.fallbackVideos
